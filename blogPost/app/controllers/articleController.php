@@ -16,6 +16,29 @@ $revision =
 new RevisionModel($conn);
 
 
+if(isset($_GET["unpublish"])){
+
+    $articleId =
+    (int)$_GET["unpublish"];
+
+
+    $article->unpublishArticle(
+
+        $articleId
+
+    );
+
+
+    header(
+
+"Location:../views/author/articleList.php"
+
+    );
+
+    exit();
+
+}
+
 
 /* CREATE ARTICLE */
 

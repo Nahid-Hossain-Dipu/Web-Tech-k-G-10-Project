@@ -7,12 +7,48 @@ include "../../../config/database.php";
 include "../../models/articleModel.php";
 
 
-$authorId = $_SESSION["userId"] ?? 1;
+$authorId =
+$_SESSION["userId"] ?? 1;
 
 
-$article = new ArticleModel($conn);
+$article =
+new ArticleModel($conn);
 
-$result = $article->getAllArticles($authorId);
+
+if(
+
+isset($_GET["status"])
+
+&&
+
+$_GET["status"]!="all"
+
+){
+
+    $status =
+    $_GET["status"];
+
+
+    $result =
+    $article->filterArticles(
+
+        $authorId,
+        $status
+
+    );
+
+}
+
+else{
+
+    $result =
+    $article->getAllArticles(
+
+        $authorId
+
+    );
+
+}
 
 ?>
 
@@ -55,6 +91,34 @@ margin-right:10px;
 <body>
 
 <h1>My Articles</h1>
+
+<a href="articleList.php?status=all">All</a> |
+
+<a href="articleList.php?status=draft">Draft</a> |
+
+<a href="articleList.php?status=submitted">Submitted</a> |
+
+<a href="articleList.php?status=revision_requested">
+
+Revision Requested
+
+</a> |
+
+<a href="articleList.php?status=published">
+
+Published
+
+</a> |
+
+<a href="articleList.php?status=unpublished">
+
+Unpublished
+
+</a>
+
+<br><br>
+
+<br><br>
 
 <table>
 
@@ -110,17 +174,49 @@ while($row = $result->fetch_assoc()){
 
 <td>
 
+<?php
+
+if($row["status"]=="draft"){
+
+?>
+
 <a href="editArticle.php?articleId=<?php echo $row["id"]; ?>">
 
 Edit
 
 </a>
 
+<?php
+
+}
+
+?>
+
+
 <a href="revisionHistory.php?articleId=<?php echo $row["id"]; ?>">
 
 Revisions
 
 </a>
+
+
+<?php
+
+if($row["status"]=="published"){
+
+?>
+
+<a href="../../controllers/articleController.php?unpublish=<?php echo $row["id"]; ?>">
+
+Unpublish
+
+</a>
+
+<?php
+
+}
+
+?>
 
 </td>
 
