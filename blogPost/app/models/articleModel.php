@@ -4,6 +4,7 @@ class ArticleModel{
 
     private $conn;
 
+
     public function __construct($db){
 
         $this->conn = $db;
@@ -11,7 +12,8 @@ class ArticleModel{
     }
 
 
-    // Get all articles of one author
+
+    // Get all articles
 
     public function getAllArticles(
 
@@ -48,48 +50,49 @@ class ArticleModel{
     }
 
 
-    // Filter articles by status
 
-public function filterArticles(
+    // Filter by status
 
-    $authorId,
-    $status
-
-){
-
-    $sql = "SELECT *
-
-            FROM articles
-
-            WHERE author_id=?
-            AND status=?
-
-            ORDER BY created_at ASC";
-
-
-    $stmt =
-    $this->conn->prepare($sql);
-
-
-    $stmt->bind_param(
-
-        "is",
+    public function filterArticles(
 
         $authorId,
         $status
 
-    );
+    ){
+
+        $sql = "SELECT *
+
+                FROM articles
+
+                WHERE author_id=?
+                AND status=?
+
+                ORDER BY created_at ASC";
 
 
-    $stmt->execute();
-
-    return $stmt->get_result();
-
-}
+        $stmt =
+        $this->conn->prepare($sql);
 
 
+        $stmt->bind_param(
 
-    // Create Article
+            "is",
+
+            $authorId,
+            $status
+
+        );
+
+
+        $stmt->execute();
+
+        return $stmt->get_result();
+
+    }
+
+
+
+    // Create article
 
     public function createArticle(
 
@@ -150,13 +153,14 @@ public function filterArticles(
 
         );
 
+
         return $stmt->execute();
 
     }
 
 
 
-    // Get Single Article
+    // Get one article
 
     public function getArticle(
 
@@ -192,7 +196,7 @@ public function filterArticles(
 
 
 
-    // Update body only (used by restore revision)
+    // Restore body from revision
 
     public function updateArticleBody(
 
@@ -228,7 +232,7 @@ public function filterArticles(
 
 
 
-    // Update Article
+    // Update article
 
     public function updateArticle(
 
@@ -272,67 +276,79 @@ public function filterArticles(
 
         );
 
+
         return $stmt->execute();
 
     }
 
+
+
+    // Submit article for editor review
+
+    public function submitArticle(
+
+        $articleId
+
+    ){
+
+        $sql = "UPDATE articles
+
+                SET status='submitted',
+                editor_feedback=NULL
+
+                WHERE id=?";
+
+
+        $stmt =
+        $this->conn->prepare($sql);
+
+
+        $stmt->bind_param(
+
+            "i",
+
+            $articleId
+
+        );
+
+
+        return $stmt->execute();
+
+    }
+
+
+
+    // Unpublish article
+
     public function unpublishArticle(
 
-    $articleId
-
-){
-
-    $sql = "UPDATE articles
-
-            SET status='unpublished'
-
-            WHERE id=?";
-
-
-    $stmt =
-    $this->conn->prepare($sql);
-
-
-    $stmt->bind_param(
-
-        "i",
-
         $articleId
 
-    );
+    ){
 
-    return $stmt->execute();
+        $sql = "UPDATE articles
 
-}
+                SET status='unpublished'
 
-public function submitArticle(
-
-    $articleId
-
-){
-
-    $sql = "UPDATE articles
-
-            SET status='submitted'
-
-            WHERE id=?";
+                WHERE id=?";
 
 
-    $stmt =
-    $this->conn->prepare($sql);
+        $stmt =
+        $this->conn->prepare($sql);
 
 
-    $stmt->bind_param(
+        $stmt->bind_param(
 
-        "i",
+            "i",
 
-        $articleId
+            $articleId
 
-    );
+        );
 
-    return $stmt->execute();
 
-}
+        return $stmt->execute();
+
+    }
 
 }
 
