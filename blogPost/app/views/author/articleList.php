@@ -88,7 +88,11 @@ while($row = $result->fetch_assoc()){
 
 <td>
 
+<a href="viewArticle.php?articleId=<?php echo $row["id"]; ?>">
+
 <?php echo $row["title"]; ?>
+
+</a>
 
 </td>
 
