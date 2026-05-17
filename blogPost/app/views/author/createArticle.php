@@ -44,6 +44,18 @@ color:red;
 
 <h1>Create Article</h1>
 
+<a href="authorDashboard.php">
+
+<button>
+
+Back To Dashboard
+
+</button>
+
+</a>
+
+<br><br>
+
 
 <?php
 
