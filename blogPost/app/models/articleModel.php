@@ -10,6 +10,42 @@ class ArticleModel{
 
     }
 
+    // Get all articles of one author
+
+public function getAllArticles(
+
+    $authorId
+
+){
+
+    $sql = "SELECT *
+
+            FROM articles
+
+            WHERE author_id=?
+
+            ORDER BY created_at ASC";
+
+
+    $stmt =
+    $this->conn->prepare($sql);
+
+
+    $stmt->bind_param(
+
+        "i",
+
+        $authorId
+
+    );
+
+
+    $stmt->execute();
+
+    return $stmt->get_result();
+
+}
+
 
     // Create Article
 
