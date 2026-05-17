@@ -179,6 +179,49 @@ public function getAllArticles(
 
     }
 
+// Update Article
+
+public function updateArticle(
+
+    $articleId,
+    $title,
+    $body,
+    $excerpt,
+    $status
+
+){
+
+    $sql = "UPDATE articles
+
+            SET title=?,
+                body=?,
+                excerpt=?,
+                status=?
+
+            WHERE id=?";
+
+
+    $stmt =
+    $this->conn->prepare($sql);
+
+
+    $stmt->bind_param(
+
+        "ssssi",
+
+        $title,
+        $body,
+        $excerpt,
+        $status,
+        $articleId
+
+    );
+
+
+    return $stmt->execute();
+
+}
+
 }
 
 ?>  
