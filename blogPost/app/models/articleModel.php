@@ -48,6 +48,7 @@ class ArticleModel{
     }
 
 
+
     // Filter articles by status
 
 public function filterArticles(
@@ -276,6 +277,12 @@ public function filterArticles(
 
     }
 
+
+}
+
+
+    public function unpublishArticle(
+
     public function unpublishArticle(
 
     $articleId
@@ -285,6 +292,39 @@ public function filterArticles(
     $sql = "UPDATE articles
 
             SET status='unpublished'
+
+            WHERE id=?";
+
+
+    $stmt =
+    $this->conn->prepare($sql);
+
+
+    $stmt->bind_param(
+
+        "i",
+
+        $articleId
+
+    );
+
+    return $stmt->execute();
+
+}
+
+public function submitArticle(
+
+
+    $articleId
+
+){
+
+    $sql = "UPDATE articles
+
+            SET status='unpublished'
+
+            SET status='submitted'
+
 
             WHERE id=?";
 
@@ -335,5 +375,6 @@ public function submitArticle(
 }
 
 }
+
 
 ?>

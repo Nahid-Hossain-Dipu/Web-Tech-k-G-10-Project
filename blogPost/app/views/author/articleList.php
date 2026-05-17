@@ -7,6 +7,13 @@ include "../../../config/database.php";
 include "../../models/articleModel.php";
 
 
+$authorId = $_SESSION["userId"] ?? 1;
+
+
+$article = new ArticleModel($conn);
+
+$result = $article->getAllArticles($authorId);
+
 $authorId =
 $_SESSION["userId"] ?? 1;
 
@@ -50,6 +57,7 @@ else{
 
 }
 
+
 ?>
 
 <!DOCTYPE html>
@@ -92,6 +100,7 @@ margin-right:10px;
 
 <h1>My Articles</h1>
 
+
 <a href="articleList.php?status=all">All</a> |
 
 <a href="articleList.php?status=draft">Draft</a> |
@@ -119,6 +128,7 @@ Unpublished
 <br><br>
 
 <br><br>
+
 
 <table>
 
@@ -174,11 +184,13 @@ while($row = $result->fetch_assoc()){
 
 <td>
 
+
 <?php
 
 if($row["status"]=="draft"){
 
 ?>
+
 
 <a href="editArticle.php?articleId=<?php echo $row["id"]; ?>">
 
@@ -186,11 +198,13 @@ Edit
 
 </a>
 
+
 <a href="../../controllers/articleController.php?submit=<?php echo $row["id"]; ?>">
 
 Submit
 
 </a>
+
 
 <?php
 
@@ -199,11 +213,13 @@ Submit
 ?>
 
 
+
 <a href="revisionHistory.php?articleId=<?php echo $row["id"]; ?>">
 
 Revisions
 
 </a>
+
 
 
 <?php
@@ -224,7 +240,11 @@ Unpublish
 
 ?>
 
+
 </td>
+
+</td>
+
 </tr>
 
 <?php

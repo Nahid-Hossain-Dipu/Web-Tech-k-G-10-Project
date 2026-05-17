@@ -16,6 +16,7 @@ $revision =
 new RevisionModel($conn);
 
 
+
 if(isset($_GET["unpublish"])){
 
     $articleId =
@@ -38,6 +39,7 @@ if(isset($_GET["unpublish"])){
     exit();
 
 }
+
 
 if(isset($_GET["submit"])){
 
