@@ -39,6 +39,29 @@ if(isset($_GET["unpublish"])){
 
 }
 
+if(isset($_GET["submit"])){
+
+    $articleId =
+    (int)$_GET["submit"];
+
+
+    $article->submitArticle(
+
+        $articleId
+
+    );
+
+
+    header(
+
+"Location:../views/author/articleList.php"
+
+    );
+
+    exit();
+
+}
+
 
 /* CREATE ARTICLE */
 
