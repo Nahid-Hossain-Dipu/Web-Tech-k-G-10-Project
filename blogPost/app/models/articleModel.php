@@ -10,6 +10,9 @@ class ArticleModel{
 
     }
 
+
+    // Create Article
+
     public function createArticle(
 
         $authorId,
@@ -24,30 +27,35 @@ class ArticleModel{
 
     ){
 
+        $editorId = NULL;
+
         $sql = "INSERT INTO articles(
 
-            author_id,
-            category_id,
-            series_id,
-            title,
-            slug,
-            body,
-            excerpt,
-            featured_image_path,
-            status
+        author_id,
+        editor_id,
+        category_id,
+        series_id,
+        title,
+        slug,
+        body,
+        excerpt,
+        featured_image_path,
+        status
 
         )
 
-        VALUES(?,?,?,?,?,?,?,?,?)";
+        VALUES(?,?,?,?,?,?,?,?,?,?)";
 
 
         $stmt = $this->conn->prepare($sql);
 
+
         $stmt->bind_param(
 
-            "iiissssss",
+            "iiiissssss",
 
             $authorId,
+            $editorId,
             $categoryId,
             $seriesId,
             $title,
@@ -56,11 +64,85 @@ class ArticleModel{
             $excerpt,
             $featuredImagePath,
             $status
+
         );
 
         return $stmt->execute();
 
     }
 
+
+
+    // Get Single Article
+
+    public function getArticle(
+
+        $articleId
+
+    ){
+
+        $sql = "SELECT *
+
+                FROM articles
+
+                WHERE id=?";
+
+
+        $stmt =
+        $this->conn->prepare($sql);
+
+
+        $stmt->bind_param(
+
+            "i",
+
+            $articleId
+
+        );
+
+
+        $stmt->execute();
+
+        return $stmt->get_result();
+
+    }
+
+
+
+    // Update Article Body
+
+    public function updateArticleBody(
+
+        $articleId,
+        $body
+
+    ){
+
+        $sql = "UPDATE articles
+
+                SET body=?
+
+                WHERE id=?";
+
+
+        $stmt =
+        $this->conn->prepare($sql);
+
+
+        $stmt->bind_param(
+
+            "si",
+
+            $body,
+            $articleId
+
+        );
+
+
+        return $stmt->execute();
+
+    }
+
 }
-?>
+
+?>  

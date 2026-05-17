@@ -80,11 +80,28 @@ enctype="multipart/form-data"
 
 <select name="categoryId">
 
-<option value="1">Technology</option>
+<?php
 
-<option value="2">Sports</option>
+include "../../../config/database.php";
 
-<option value="3">News</option>
+$result =
+$conn->query(
+"SELECT * FROM categories"
+);
+
+while($row=
+$result->fetch_assoc()){
+
+?>
+
+<option
+value="<?php echo $row['id']; ?>">
+
+<?php echo $row['name']; ?>
+
+</option>
+
+<?php } ?>
 
 </select>
 
@@ -94,11 +111,30 @@ enctype="multipart/form-data"
 
 <select name="seriesId">
 
-<option value="">None</option>
+<option value="">
+None
+</option>
 
-<option value="1">Web Development</option>
+<?php
 
-<option value="2">Programming</option>
+$result =
+$conn->query(
+"SELECT * FROM series"
+);
+
+while($row=
+$result->fetch_assoc()){
+
+?>
+
+<option
+value="<?php echo $row['id']; ?>">
+
+<?php echo $row['title']; ?>
+
+</option>
+
+<?php } ?>
 
 </select>
 
