@@ -7,17 +7,13 @@ include "../../../config/database.php";
 include "../../models/articleModel.php";
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 $authorId = $_SESSION["userId"] ?? 1;
 
 
 $article = new ArticleModel($conn);
 
 $result = $article->getAllArticles($authorId);
-=======
-=======
->>>>>>> origin/main
+
 $authorId =
 $_SESSION["userId"] ?? 1;
 
@@ -60,10 +56,7 @@ else{
     );
 
 }
-<<<<<<< HEAD
->>>>>>> a5488371d680df4dd16c0dd7963996abab588316
-=======
->>>>>>> origin/main
+
 
 ?>
 
@@ -107,11 +100,7 @@ margin-right:10px;
 
 <h1>My Articles</h1>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> origin/main
+
 <a href="articleList.php?status=all">All</a> |
 
 <a href="articleList.php?status=draft">Draft</a> |
@@ -140,10 +129,7 @@ Unpublished
 
 <br><br>
 
-<<<<<<< HEAD
->>>>>>> a5488371d680df4dd16c0dd7963996abab588316
-=======
->>>>>>> origin/main
+
 <table>
 
 <tr>
@@ -198,38 +184,28 @@ while($row = $result->fetch_assoc()){
 
 <td>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> origin/main
+
 <?php
 
 if($row["status"]=="draft"){
 
 ?>
 
-<<<<<<< HEAD
->>>>>>> a5488371d680df4dd16c0dd7963996abab588316
-=======
->>>>>>> origin/main
+
 <a href="editArticle.php?articleId=<?php echo $row["id"]; ?>">
 
 Edit
 
 </a>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
+
 <a href="../../controllers/articleController.php?submit=<?php echo $row["id"]; ?>">
 
 Submit
 
 </a>
 
->>>>>>> origin/main
+
 <?php
 
 }
@@ -237,21 +213,14 @@ Submit
 ?>
 
 
-<<<<<<< HEAD
->>>>>>> a5488371d680df4dd16c0dd7963996abab588316
-=======
->>>>>>> origin/main
+
 <a href="revisionHistory.php?articleId=<?php echo $row["id"]; ?>">
 
 Revisions
 
 </a>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> origin/main
+
 
 <?php
 
@@ -271,13 +240,11 @@ Unpublish
 
 ?>
 
-<<<<<<< HEAD
->>>>>>> a5488371d680df4dd16c0dd7963996abab588316
+
 </td>
 
-=======
 </td>
->>>>>>> origin/main
+
 </tr>
 
 <?php
