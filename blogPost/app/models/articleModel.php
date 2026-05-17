@@ -48,6 +48,11 @@ class ArticleModel{
     }
 
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> origin/main
     // Filter articles by status
 
 public function filterArticles(
@@ -88,6 +93,10 @@ public function filterArticles(
 }
 
 
+<<<<<<< HEAD
+>>>>>>> a5488371d680df4dd16c0dd7963996abab588316
+=======
+>>>>>>> origin/main
 
     // Create Article
 
@@ -276,6 +285,13 @@ public function filterArticles(
 
     }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+}
+
+=======
+    public function unpublishArticle(
+=======
     public function unpublishArticle(
 
     $articleId
@@ -306,6 +322,7 @@ public function filterArticles(
 }
 
 public function submitArticle(
+>>>>>>> origin/main
 
     $articleId
 
@@ -313,7 +330,11 @@ public function submitArticle(
 
     $sql = "UPDATE articles
 
+<<<<<<< HEAD
+            SET status='unpublished'
+=======
             SET status='submitted'
+>>>>>>> origin/main
 
             WHERE id=?";
 
@@ -336,4 +357,8 @@ public function submitArticle(
 
 }
 
+<<<<<<< HEAD
+>>>>>>> a5488371d680df4dd16c0dd7963996abab588316
+=======
+>>>>>>> origin/main
 ?>

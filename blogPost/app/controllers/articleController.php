@@ -16,6 +16,11 @@ $revision =
 new RevisionModel($conn);
 
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> origin/main
 if(isset($_GET["unpublish"])){
 
     $articleId =
@@ -39,6 +44,9 @@ if(isset($_GET["unpublish"])){
 
 }
 
+<<<<<<< HEAD
+>>>>>>> a5488371d680df4dd16c0dd7963996abab588316
+=======
 if(isset($_GET["submit"])){
 
     $articleId =
@@ -62,6 +70,7 @@ if(isset($_GET["submit"])){
 
 }
 
+>>>>>>> origin/main
 
 /* CREATE ARTICLE */
 
