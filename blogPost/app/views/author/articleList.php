@@ -186,6 +186,12 @@ Edit
 
 </a>
 
+<a href="../../controllers/articleController.php?submit=<?php echo $row["id"]; ?>">
+
+Submit
+
+</a>
+
 <?php
 
 }
@@ -219,7 +225,6 @@ Unpublish
 ?>
 
 </td>
-
 </tr>
 
 <?php

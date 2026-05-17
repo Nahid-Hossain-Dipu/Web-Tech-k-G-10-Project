@@ -305,6 +305,35 @@ public function filterArticles(
 
 }
 
+public function submitArticle(
+
+    $articleId
+
+){
+
+    $sql = "UPDATE articles
+
+            SET status='submitted'
+
+            WHERE id=?";
+
+
+    $stmt =
+    $this->conn->prepare($sql);
+
+
+    $stmt->bind_param(
+
+        "i",
+
+        $articleId
+
+    );
+
+    return $stmt->execute();
+
+}
+
 }
 
 ?>
