@@ -48,6 +48,49 @@ class ArticleModel{
     }
 
 
+<<<<<<< HEAD
+=======
+    // Filter articles by status
+
+public function filterArticles(
+
+    $authorId,
+    $status
+
+){
+
+    $sql = "SELECT *
+
+            FROM articles
+
+            WHERE author_id=?
+            AND status=?
+
+            ORDER BY created_at ASC";
+
+
+    $stmt =
+    $this->conn->prepare($sql);
+
+
+    $stmt->bind_param(
+
+        "is",
+
+        $authorId,
+        $status
+
+    );
+
+
+    $stmt->execute();
+
+    return $stmt->get_result();
+
+}
+
+
+>>>>>>> a5488371d680df4dd16c0dd7963996abab588316
 
     // Create Article
 
@@ -236,6 +279,40 @@ class ArticleModel{
 
     }
 
+<<<<<<< HEAD
 }
 
+=======
+    public function unpublishArticle(
+
+    $articleId
+
+){
+
+    $sql = "UPDATE articles
+
+            SET status='unpublished'
+
+            WHERE id=?";
+
+
+    $stmt =
+    $this->conn->prepare($sql);
+
+
+    $stmt->bind_param(
+
+        "i",
+
+        $articleId
+
+    );
+
+    return $stmt->execute();
+
+}
+
+}
+
+>>>>>>> a5488371d680df4dd16c0dd7963996abab588316
 ?>

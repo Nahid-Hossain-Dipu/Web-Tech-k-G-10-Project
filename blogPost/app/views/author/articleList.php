@@ -7,12 +7,57 @@ include "../../../config/database.php";
 include "../../models/articleModel.php";
 
 
+<<<<<<< HEAD
 $authorId = $_SESSION["userId"] ?? 1;
 
 
 $article = new ArticleModel($conn);
 
 $result = $article->getAllArticles($authorId);
+=======
+$authorId =
+$_SESSION["userId"] ?? 1;
+
+
+$article =
+new ArticleModel($conn);
+
+
+if(
+
+isset($_GET["status"])
+
+&&
+
+$_GET["status"]!="all"
+
+){
+
+    $status =
+    $_GET["status"];
+
+
+    $result =
+    $article->filterArticles(
+
+        $authorId,
+        $status
+
+    );
+
+}
+
+else{
+
+    $result =
+    $article->getAllArticles(
+
+        $authorId
+
+    );
+
+}
+>>>>>>> a5488371d680df4dd16c0dd7963996abab588316
 
 ?>
 
@@ -56,6 +101,37 @@ margin-right:10px;
 
 <h1>My Articles</h1>
 
+<<<<<<< HEAD
+=======
+<a href="articleList.php?status=all">All</a> |
+
+<a href="articleList.php?status=draft">Draft</a> |
+
+<a href="articleList.php?status=submitted">Submitted</a> |
+
+<a href="articleList.php?status=revision_requested">
+
+Revision Requested
+
+</a> |
+
+<a href="articleList.php?status=published">
+
+Published
+
+</a> |
+
+<a href="articleList.php?status=unpublished">
+
+Unpublished
+
+</a>
+
+<br><br>
+
+<br><br>
+
+>>>>>>> a5488371d680df4dd16c0dd7963996abab588316
 <table>
 
 <tr>
@@ -110,18 +186,59 @@ while($row = $result->fetch_assoc()){
 
 <td>
 
+<<<<<<< HEAD
+=======
+<?php
+
+if($row["status"]=="draft"){
+
+?>
+
+>>>>>>> a5488371d680df4dd16c0dd7963996abab588316
 <a href="editArticle.php?articleId=<?php echo $row["id"]; ?>">
 
 Edit
 
 </a>
 
+<<<<<<< HEAD
+=======
+<?php
+
+}
+
+?>
+
+
+>>>>>>> a5488371d680df4dd16c0dd7963996abab588316
 <a href="revisionHistory.php?articleId=<?php echo $row["id"]; ?>">
 
 Revisions
 
 </a>
 
+<<<<<<< HEAD
+=======
+
+<?php
+
+if($row["status"]=="published"){
+
+?>
+
+<a href="../../controllers/articleController.php?unpublish=<?php echo $row["id"]; ?>">
+
+Unpublish
+
+</a>
+
+<?php
+
+}
+
+?>
+
+>>>>>>> a5488371d680df4dd16c0dd7963996abab588316
 </td>
 
 </tr>
