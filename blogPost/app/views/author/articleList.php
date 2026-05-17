@@ -102,6 +102,18 @@ My Articles
 
 </h1>
 
+<a href="authorDashboard.php">
+
+<button>
+
+Back To Dashboard
+
+</button>
+
+</a>
+
+<br><br>
+
 
 <a href="articleList.php?status=all">
 
