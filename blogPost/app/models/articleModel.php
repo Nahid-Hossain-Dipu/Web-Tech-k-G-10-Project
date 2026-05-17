@@ -10,41 +10,43 @@ class ArticleModel{
 
     }
 
+
     // Get all articles of one author
 
-public function getAllArticles(
-
-    $authorId
-
-){
-
-    $sql = "SELECT *
-
-            FROM articles
-
-            WHERE author_id=?
-
-            ORDER BY created_at ASC";
-
-
-    $stmt =
-    $this->conn->prepare($sql);
-
-
-    $stmt->bind_param(
-
-        "i",
+    public function getAllArticles(
 
         $authorId
 
-    );
+    ){
+
+        $sql = "SELECT *
+
+                FROM articles
+
+                WHERE author_id=?
+
+                ORDER BY created_at ASC";
 
 
-    $stmt->execute();
+        $stmt =
+        $this->conn->prepare($sql);
 
-    return $stmt->get_result();
 
-}
+        $stmt->bind_param(
+
+            "i",
+
+            $authorId
+
+        );
+
+
+        $stmt->execute();
+
+        return $stmt->get_result();
+
+    }
+
 
 
     // Create Article
@@ -58,12 +60,14 @@ public function getAllArticles(
         $slug,
         $body,
         $excerpt,
+        $tags,
         $featuredImagePath,
         $status
 
     ){
 
         $editorId = NULL;
+
 
         $sql = "INSERT INTO articles(
 
@@ -75,20 +79,22 @@ public function getAllArticles(
         slug,
         body,
         excerpt,
+        tags,
         featured_image_path,
         status
 
         )
 
-        VALUES(?,?,?,?,?,?,?,?,?,?)";
+        VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 
 
-        $stmt = $this->conn->prepare($sql);
+        $stmt =
+        $this->conn->prepare($sql);
 
 
         $stmt->bind_param(
 
-            "iiiissssss",
+            "iiiisssssss",
 
             $authorId,
             $editorId,
@@ -98,6 +104,7 @@ public function getAllArticles(
             $slug,
             $body,
             $excerpt,
+            $tags,
             $featuredImagePath,
             $status
 
@@ -145,7 +152,7 @@ public function getAllArticles(
 
 
 
-    // Update Article Body
+    // Update body only (used by restore revision)
 
     public function updateArticleBody(
 
@@ -179,49 +186,56 @@ public function getAllArticles(
 
     }
 
-// Update Article
-
-public function updateArticle(
-
-    $articleId,
-    $title,
-    $body,
-    $excerpt,
-    $status
-
-){
-
-    $sql = "UPDATE articles
-
-            SET title=?,
-                body=?,
-                excerpt=?,
-                status=?
-
-            WHERE id=?";
 
 
-    $stmt =
-    $this->conn->prepare($sql);
+    // Update Article
 
+    public function updateArticle(
 
-    $stmt->bind_param(
-
-        "ssssi",
-
+        $articleId,
         $title,
         $body,
         $excerpt,
-        $status,
-        $articleId
+        $tags,
+        $featuredImagePath,
+        $status
 
-    );
+    ){
+
+        $sql = "UPDATE articles
+
+                SET title=?,
+                body=?,
+                excerpt=?,
+                tags=?,
+                featured_image_path=?,
+                status=?
+
+                WHERE id=?";
 
 
-    return $stmt->execute();
+        $stmt =
+        $this->conn->prepare($sql);
+
+
+        $stmt->bind_param(
+
+            "ssssssi",
+
+            $title,
+            $body,
+            $excerpt,
+            $tags,
+            $featuredImagePath,
+            $status,
+            $articleId
+
+        );
+
+        return $stmt->execute();
+
+    }
 
 }
 
-}
-
-?>  
+?>

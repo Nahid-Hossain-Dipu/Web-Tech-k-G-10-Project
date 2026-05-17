@@ -42,6 +42,7 @@ $_SERVER["REQUEST_METHOD"]=="POST"
     :
     NULL;
 
+
     $title =
     $_POST["title"];
 
@@ -51,11 +52,16 @@ $_SERVER["REQUEST_METHOD"]=="POST"
     $excerpt =
     $_POST["excerpt"];
 
+    $tags =
+    $_POST["tags"];
+
     $status =
     $_POST["status"];
 
 
-    $slug = strtolower(
+
+    $slug =
+    strtolower(
 
         str_replace(
             " ",
@@ -64,6 +70,7 @@ $_SERVER["REQUEST_METHOD"]=="POST"
         )
 
     );
+
 
 
     // IMAGE UPLOAD
@@ -92,9 +99,11 @@ $_SERVER["REQUEST_METHOD"]=="POST"
     move_uploaded_file(
 
         $tempName,
+
         $uploadPath
 
     );
+
 
 
     if(
@@ -108,6 +117,7 @@ $_SERVER["REQUEST_METHOD"]=="POST"
             $slug,
             $body,
             $excerpt,
+            $tags,
             $featuredImagePath,
             $status
 
@@ -140,29 +150,40 @@ isset($_POST["updateArticle"])
     $authorId =
     $_SESSION["userId"] ?? 1;
 
+
     $articleId =
     $_POST["articleId"];
+
 
     $title =
     $_POST["title"];
 
+
     $body =
     $_POST["body"];
 
+
     $excerpt =
     $_POST["excerpt"];
+
+
+    $tags =
+    $_POST["tags"];
+
 
     $status =
     $_POST["status"];
 
 
 
-    // Get current article
+    // Current article
 
     $oldArticle =
 
     $article->getArticle(
+
         $articleId
+
     );
 
 
@@ -172,7 +193,7 @@ isset($_POST["updateArticle"])
 
 
 
-    // Save old version
+    // Save revision
 
     $revision->saveRevision(
 
@@ -184,6 +205,60 @@ isset($_POST["updateArticle"])
 
 
 
+    // Keep previous image
+
+    $featuredImagePath =
+
+    $row["featured_image_path"];
+
+
+
+    // Upload new image
+
+    if(
+
+    !empty(
+    $_FILES["featuredImage"]["name"]
+    )
+
+    ){
+
+        $imageName =
+        $_FILES["featuredImage"]["name"];
+
+
+        $tempName =
+        $_FILES["featuredImage"]["tmp_name"];
+
+
+        $featuredImagePath =
+        "uploads/articleImages/"
+        .
+        $imageName;
+
+
+
+        $uploadPath =
+        __DIR__
+        .
+        "/../../"
+        .
+        $featuredImagePath;
+
+
+
+        move_uploaded_file(
+
+            $tempName,
+
+            $uploadPath
+
+        );
+
+    }
+
+
+
     // Update article
 
     $article->updateArticle(
@@ -192,6 +267,8 @@ isset($_POST["updateArticle"])
         $title,
         $body,
         $excerpt,
+        $tags,
+        $featuredImagePath,
         $status
 
     );

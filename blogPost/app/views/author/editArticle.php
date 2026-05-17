@@ -75,12 +75,13 @@ height:200px;
 
 <h1>Edit Article</h1>
 
-
 <form
 
 action="../../controllers/articleController.php"
 
 method="POST"
+
+enctype="multipart/form-data"
 
 >
 
@@ -142,6 +143,70 @@ required
 
 <label>
 
+Tags
+
+</label>
+
+<input
+
+type="text"
+
+name="tags"
+
+value="<?php echo $row["tags"]; ?>"
+
+>
+
+
+
+<label>
+
+Current Image
+
+</label>
+
+<br>
+
+<?php
+
+if(!empty($row["featured_image_path"])){
+
+?>
+
+<img
+
+src="../../../<?php echo $row["featured_image_path"]; ?>"
+
+width="200"
+
+>
+
+<?php
+
+}
+
+?>
+
+<br><br>
+
+
+<label>
+
+Upload New Image
+
+</label>
+
+<input
+
+type="file"
+
+name="featuredImage"
+
+>
+
+
+<label>
+
 Status
 
 </label>
@@ -152,13 +217,12 @@ name="status"
 
 >
 
-<option value="draft"
+<option
+value="draft"
 
 <?php
 
-if(
-$row["status"]=="draft"
-)
+if($row["status"]=="draft")
 
 echo "selected";
 
@@ -171,14 +235,12 @@ Draft
 </option>
 
 
-
-<option value="submitted"
+<option
+value="submitted"
 
 <?php
 
-if(
-$row["status"]=="submitted"
-)
+if($row["status"]=="submitted")
 
 echo "selected";
 
@@ -203,6 +265,9 @@ Update Article
 </button>
 
 </form>
+
+
+
 
 </body>
 
