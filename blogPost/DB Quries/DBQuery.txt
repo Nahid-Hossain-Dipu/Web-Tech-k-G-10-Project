@@ -1,0 +1,47 @@
+CREATE DATABASE blog_platform;
+--Create Users Table
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    username VARCHAR(100) UNIQUE,
+    email VARCHAR(100) UNIQUE,
+    password_hash VARCHAR(255),
+    role ENUM('reader','author','editor','admin') DEFAULT 'reader',
+    bio TEXT,
+    profile_pic VARCHAR(255),
+    is_active TINYINT DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+--ARTICLES
+CREATE TABLE articles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255),
+    body TEXT,
+    featured_image_path VARCHAR(255),
+    author_name VARCHAR(100),
+    status ENUM('draft','published') DEFAULT 'published',
+    view_count INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    article_id INT,
+    user_id INT,
+    body TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+); 
+CREATE TABLE likes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    article_id INT,
+    user_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE bookmarks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    article_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+ALTER TABLE users
+ADD bio TEXT,
+ADD profile_picture VARCHAR(255);
