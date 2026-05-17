@@ -7,13 +7,6 @@ include "../../../config/database.php";
 include "../../models/articleModel.php";
 
 
-$authorId = $_SESSION["userId"] ?? 1;
-
-
-$article = new ArticleModel($conn);
-
-$result = $article->getAllArticles($authorId);
-
 $authorId =
 $_SESSION["userId"] ?? 1;
 
@@ -21,6 +14,8 @@ $_SESSION["userId"] ?? 1;
 $article =
 new ArticleModel($conn);
 
+
+// Filter
 
 if(
 
@@ -57,7 +52,6 @@ else{
 
 }
 
-
 ?>
 
 <!DOCTYPE html>
@@ -66,7 +60,11 @@ else{
 
 <head>
 
-<title>My Articles</title>
+<title>
+
+My Articles
+
+</title>
 
 <style>
 
@@ -98,14 +96,30 @@ margin-right:10px;
 
 <body>
 
-<h1>My Articles</h1>
+<h1>
+
+My Articles
+
+</h1>
 
 
-<a href="articleList.php?status=all">All</a> |
+<a href="articleList.php?status=all">
 
-<a href="articleList.php?status=draft">Draft</a> |
+All
 
-<a href="articleList.php?status=submitted">Submitted</a> |
+</a> |
+
+<a href="articleList.php?status=draft">
+
+Draft
+
+</a> |
+
+<a href="articleList.php?status=submitted">
+
+Submitted
+
+</a> |
 
 <a href="articleList.php?status=revision_requested">
 
@@ -127,28 +141,58 @@ Unpublished
 
 <br><br>
 
-<br><br>
-
 
 <table>
 
 <tr>
 
-<th>ID</th>
+<th>
 
-<th>Title</th>
+ID
 
-<th>Status</th>
+</th>
 
-<th>Created</th>
+<th>
 
-<th>Action</th>
+Title
+
+</th>
+
+<th>
+
+Status
+
+</th>
+
+<th>
+
+Editor Feedback
+
+</th>
+
+<th>
+
+Created
+
+</th>
+
+<th>
+
+Action
+
+</th>
 
 </tr>
 
+
 <?php
 
-while($row = $result->fetch_assoc()){
+while(
+
+$row =
+$result->fetch_assoc()
+
+){
 
 ?>
 
@@ -156,41 +200,92 @@ while($row = $result->fetch_assoc()){
 
 <td>
 
-<?php echo $row["id"]; ?>
+<?php
+
+echo $row["id"];
+
+?>
 
 </td>
+
 
 <td>
 
 <a href="viewArticle.php?articleId=<?php echo $row["id"]; ?>">
 
-<?php echo $row["title"]; ?>
+<?php
+
+echo $row["title"];
+
+?>
 
 </a>
 
 </td>
 
-<td>
-
-<?php echo $row["status"]; ?>
-
-</td>
 
 <td>
-
-<?php echo $row["created_at"]; ?>
-
-</td>
-
-<td>
-
 
 <?php
 
-if($row["status"]=="draft"){
+echo $row["status"];
 
 ?>
 
+</td>
+
+
+<td>
+
+<?php
+
+if(
+
+$row["status"]=="revision_requested"
+
+){
+
+echo $row["editor_feedback"];
+
+}
+
+else{
+
+echo "-";
+
+}
+
+?>
+
+</td>
+
+
+<td>
+
+<?php
+
+echo $row["created_at"];
+
+?>
+
+</td>
+
+
+<td>
+
+<?php
+
+if(
+
+$row["status"]=="draft"
+
+||
+
+$row["status"]=="revision_requested"
+
+){
+
+?>
 
 <a href="editArticle.php?articleId=<?php echo $row["id"]; ?>">
 
@@ -201,17 +296,33 @@ Edit
 
 <a href="../../controllers/articleController.php?submit=<?php echo $row["id"]; ?>">
 
-Submit
+<?php
+
+if(
+
+$row["status"]=="revision_requested"
+
+){
+
+echo "Resubmit";
+
+}
+
+else{
+
+echo "Submit";
+
+}
+
+?>
 
 </a>
-
 
 <?php
 
 }
 
 ?>
-
 
 
 <a href="revisionHistory.php?articleId=<?php echo $row["id"]; ?>">
@@ -221,10 +332,13 @@ Revisions
 </a>
 
 
-
 <?php
 
-if($row["status"]=="published"){
+if(
+
+$row["status"]=="published"
+
+){
 
 ?>
 
@@ -239,9 +353,6 @@ Unpublish
 }
 
 ?>
-
-
-</td>
 
 </td>
 
