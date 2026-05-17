@@ -350,6 +350,45 @@ class ArticleModel{
 
     }
 
+    public function searchArticles(
+
+    $authorId,
+    $keyword
+
+){
+
+    $keyword = "%" . $keyword . "%";
+
+    $sql = "SELECT *
+
+            FROM articles
+
+            WHERE author_id=?
+            AND title LIKE ?
+
+            ORDER BY created_at ASC";
+
+
+    $stmt =
+    $this->conn->prepare($sql);
+
+
+    $stmt->bind_param(
+
+        "is",
+
+        $authorId,
+        $keyword
+
+    );
+
+
+    $stmt->execute();
+
+    return $stmt->get_result();
+
+}
+
 }
 
 ?>

@@ -90,6 +90,21 @@ margin-right:10px;
 
 }
 
+button{
+
+padding:10px 20px;
+cursor:pointer;
+
+}
+
+input{
+
+padding:10px;
+width:300px;
+margin-bottom:20px;
+
+}
+
 </style>
 
 </head>
@@ -102,6 +117,7 @@ My Articles
 
 </h1>
 
+
 <a href="authorDashboard.php">
 
 <button>
@@ -111,6 +127,21 @@ Back To Dashboard
 </button>
 
 </a>
+
+<br><br>
+
+
+<input
+
+type="text"
+
+id="searchBox"
+
+placeholder="Search article..."
+
+onkeyup="searchArticle()"
+
+>
 
 <br><br>
 
@@ -158,44 +189,22 @@ Unpublished
 
 <tr>
 
-<th>
+<th>ID</th>
 
-ID
+<th>Title</th>
 
-</th>
+<th>Status</th>
 
-<th>
+<th>Editor Feedback</th>
 
-Title
+<th>Created</th>
 
-</th>
-
-<th>
-
-Status
-
-</th>
-
-<th>
-
-Editor Feedback
-
-</th>
-
-<th>
-
-Created
-
-</th>
-
-<th>
-
-Action
-
-</th>
+<th>Action</th>
 
 </tr>
 
+
+<tbody id="articleTable">
 
 <?php
 
@@ -212,11 +221,7 @@ $result->fetch_assoc()
 
 <td>
 
-<?php
-
-echo $row["id"];
-
-?>
+<?php echo $row["id"]; ?>
 
 </td>
 
@@ -225,11 +230,7 @@ echo $row["id"];
 
 <a href="viewArticle.php?articleId=<?php echo $row["id"]; ?>">
 
-<?php
-
-echo $row["title"];
-
-?>
+<?php echo $row["title"]; ?>
 
 </a>
 
@@ -238,11 +239,7 @@ echo $row["title"];
 
 <td>
 
-<?php
-
-echo $row["status"];
-
-?>
+<?php echo $row["status"]; ?>
 
 </td>
 
@@ -274,11 +271,7 @@ echo "-";
 
 <td>
 
-<?php
-
-echo $row["created_at"];
-
-?>
+<?php echo $row["created_at"]; ?>
 
 </td>
 
@@ -376,7 +369,55 @@ Unpublish
 
 ?>
 
+</tbody>
+
 </table>
+
+
+<script>
+
+function searchArticle(){
+
+let keyword =
+
+document.getElementById(
+"searchBox"
+).value;
+
+
+let xhr =
+
+new XMLHttpRequest();
+
+
+xhr.open(
+
+"GET",
+
+"../../../ajax/searchArticles.php?keyword="
++
+keyword,
+
+true
+
+);
+
+
+xhr.onload = function(){
+
+document.getElementById(
+"articleTable"
+).innerHTML =
+this.responseText;
+
+};
+
+
+xhr.send();
+
+}
+
+</script>
 
 </body>
 
