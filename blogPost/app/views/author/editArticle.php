@@ -7,29 +7,28 @@ include "../../../config/database.php";
 include "../../models/articleModel.php";
 
 
-if(!isset($_GET["articleId"])){
+if (!isset($_GET["articleId"])) {
 
     die("Article ID Missing");
-
 }
 
 
 $articleId =
-(int)$_GET["articleId"];
+    (int)$_GET["articleId"];
 
 
 $article =
-new ArticleModel($conn);
+    new ArticleModel($conn);
 
 
 $result =
-$article->getArticle(
-    $articleId
-);
+    $article->getArticle(
+        $articleId
+    );
 
 
 $row =
-$result->fetch_assoc();
+    $result->fetch_assoc();
 
 ?>
 
@@ -40,231 +39,174 @@ $result->fetch_assoc();
 
 <head>
 
-<title>Edit Article</title>
+    <title>Edit Article</title>
 
-<style>
+    <style>
+        body {
 
-body{
+            font-family: Arial;
+            margin: 40px;
 
-font-family:Arial;
-margin:40px;
+        }
 
-}
+        input,
+        textarea,
+        select {
 
-input,
-textarea,
-select{
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
 
-width:100%;
-padding:10px;
-margin-bottom:20px;
+        }
 
-}
+        textarea {
 
-textarea{
+            height: 200px;
 
-height:200px;
-
-}
-
-</style>
+        }
+    </style>
 
 </head>
 
 <body>
 
-<h1>Edit Article</h1>
+    <h1>Edit Article</h1>
 
-<form
+    <form
 
-action="../../controllers/articleController.php"
+        action="../../controllers/articleController.php"
 
-method="POST"
+        method="POST"
 
-enctype="multipart/form-data"
+        enctype="multipart/form-data">
 
->
+        <input
+            type="hidden"
+            name="articleId"
+            value="<?php echo $row["id"]; ?>"
+        >
 
-<input
-type="hidden"
-name="articleId"
-value="<?php echo $row["id"]; ?>"
->
+        <label>
 
+            Title
 
-<label>
+        </label>
 
-Title
+        <input
 
-</label>
+            type="text"
 
-<input
+            name="title"
 
-type="text"
+            value="<?php echo $row["title"]; ?>"
 
-name="title"
+            required>
 
-value="<?php echo $row["title"]; ?>"
 
-required
+        <label>
 
->
+            Excerpt
 
+        </label>
 
-<label>
+        <textarea name="excerpt"><?php echo $row["excerpt"]; ?></textarea>
 
-Excerpt
+        <label>
 
-</label>
+            Body
 
-<textarea
+        </label>
 
-name="excerpt"
+        <textarea name="body" required><?php echo $row["body"]; ?></textarea>
 
-><?php echo $row["excerpt"]; ?></textarea>
+        <label>
 
+            Tags
 
+        </label>
 
-<label>
+        <input type="text" name="tags" value="<?php echo $row["tags"]; ?>">
 
-Body
+        <label>
 
-</label>
+            Current Image
 
-<textarea
+        </label>
 
-name="body"
+        <br>
 
-required
+        <?php
 
-><?php echo $row["body"]; ?></textarea>
+        if (!empty($row["featured_image_path"])) {
 
+        ?>
 
+            <img src="../../../<?php echo $row["featured_image_path"]; ?>" width="200">
+        <?php
 
-<label>
+        }
 
-Tags
+        ?>
 
-</label>
+        <br><br>
 
-<input
+        <label>
+            Upload New Image
+        </label>
 
-type="text"
+        <input type="file" name="featuredImage">
 
-name="tags"
+        <label>
 
-value="<?php echo $row["tags"]; ?>"
+            Status
 
->
+        </label>
 
+        <select
 
+            name="status">
 
-<label>
+            <option
+                value="draft"
 
-Current Image
+                <?php
 
-</label>
+                if ($row["status"] == "draft")
 
-<br>
+                    echo "selected";
 
-<?php
+                ?>>
 
-if(!empty($row["featured_image_path"])){
+                Draft
 
-?>
+            </option>
 
-<img
 
-src="../../../<?php echo $row["featured_image_path"]; ?>"
+            <option
+                value="submitted"
 
-width="200"
+                <?php
 
->
+                if ($row["status"] == "submitted")
 
-<?php
+                    echo "selected";
 
-}
+                ?>>
 
-?>
+                Submitted
 
-<br><br>
+            </option>
 
+        </select>
 
-<label>
 
-Upload New Image
+        <button type="submit" name="updateArticle">
 
-</label>
+            Update Article
 
-<input
+        </button>
 
-type="file"
-
-name="featuredImage"
-
->
-
-
-<label>
-
-Status
-
-</label>
-
-<select
-
-name="status"
-
->
-
-<option
-value="draft"
-
-<?php
-
-if($row["status"]=="draft")
-
-echo "selected";
-
-?>
-
->
-
-Draft
-
-</option>
-
-
-<option
-value="submitted"
-
-<?php
-
-if($row["status"]=="submitted")
-
-echo "selected";
-
-?>
-
->
-
-Submitted
-
-</option>
-
-</select>
-
-
-<button
-type="submit"
-name="updateArticle"
->
-
-Update Article
-
-</button>
-
-</form>
+    </form>
 
 
 

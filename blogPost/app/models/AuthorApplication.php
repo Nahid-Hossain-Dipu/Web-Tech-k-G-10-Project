@@ -1,39 +1,27 @@
 <?php
 
-class AuthorApplication{
+class AuthorApplication
+{
+    function getApplications()
+    {
 
+        global $conn;
 
-function getApplications(){
+        $sql = "SELECT id, name, email FROM users WHERE role='reader' AND is_author_approved=0";
 
-global $conn;
+        return mysqli_query(
+            $conn,
+            $sql
+        );
+    }
 
-$sql="SELECT
-id,
-name,
-email
+    function approve(
+        $id
+    ) {
 
-FROM users
+        global $conn;
 
-WHERE role='reader'
-
-AND is_author_approved=0";
-
-return mysqli_query(
-$conn,
-$sql
-);
-
-}
-
-
-
-function approve(
-$id
-){
-
-global $conn;
-
-$sql="UPDATE users
+        $sql = "UPDATE users
 
 SET
 
@@ -44,33 +32,32 @@ is_author_approved=1
 WHERE id=?";
 
 
-$stmt=
-mysqli_prepare(
-$conn,
-$sql
-);
+        $stmt =
+            mysqli_prepare(
+                $conn,
+                $sql
+            );
 
-mysqli_stmt_bind_param(
-$stmt,
-"i",
-$id
-);
+        mysqli_stmt_bind_param(
+            $stmt,
+            "i",
+            $id
+        );
 
-return mysqli_stmt_execute(
-$stmt
-);
-
-}
-
+        return mysqli_stmt_execute(
+            $stmt
+        );
+    }
 
 
-function reject(
-$id
-){
 
-global $conn;
+    function reject(
+        $id
+    ) {
 
-$sql="UPDATE users
+        global $conn;
+
+        $sql = "UPDATE users
 
 SET
 
@@ -79,24 +66,20 @@ is_author_approved=-1
 WHERE id=?";
 
 
-$stmt=
-mysqli_prepare(
-$conn,
-$sql
-);
+        $stmt =
+            mysqli_prepare(
+                $conn,
+                $sql
+            );
 
-mysqli_stmt_bind_param(
-$stmt,
-"i",
-$id
-);
+        mysqli_stmt_bind_param(
+            $stmt,
+            "i",
+            $id
+        );
 
-return mysqli_stmt_execute(
-$stmt
-);
-
+        return mysqli_stmt_execute(
+            $stmt
+        );
+    }
 }
-
-}
-
-?>

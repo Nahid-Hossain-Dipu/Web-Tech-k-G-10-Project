@@ -11,342 +11,330 @@ include "../../../config/database.php";
 
 <head>
 
-<title>
+    <title>
 
-Create Article
+        Create Article
 
-</title>
+    </title>
 
-<style>
+    <style>
+        body {
 
-body{
+            font-family: Arial;
+            margin: 40px;
+            background-color: #f5f5f5;
 
-    font-family:Arial;
-    margin:40px;
-    background-color:#f5f5f5;
+        }
 
-}
+        .container {
 
-.container{
+            width: 70%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border: 1px solid lightgray;
 
-    width:70%;
-    margin:auto;
-    background:white;
-    padding:20px;
-    border:1px solid lightgray;
+        }
 
-}
+        h1 {
+            text-align: center;
 
-h1{
-    text-align: center;
+            color: black;
 
-    color:black;
+        }
 
-}
+        input,
+        textarea,
+        select {
 
-input,
-textarea,
-select{
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 1px solid gray;
 
-    width:100%;
-    padding:10px;
-    margin-top:10px;
-    margin-bottom:20px;
-    border:1px solid gray;
+        }
 
-}
+        textarea {
 
-textarea{
+            height: 200px;
 
-    height:200px;
+        }
 
-}
+        button {
 
-button{
+            padding: 10px 20px;
+            background-color: grey;
+            color: white;
+            border: none;
+            cursor: pointer;
 
-    padding:10px 20px;
-    background-color:grey;
-    color:white;
-    border:none;
-    cursor:pointer;
+        }
 
-}
+        button:hover {
 
-button:hover{
+            background-color: black;
 
-    background-color:black;
+        }
 
-}
+        .success {
 
-.success{
+            color: green;
+            font-weight: bold;
 
-    color:green;
-    font-weight:bold;
+        }
 
-}
+        .error {
 
-.error{
+            color: red;
+            font-weight: bold;
 
-    color:red;
-    font-weight:bold;
+        }
 
-}
+        .backButton {
 
-.backButton{
+            margin-bottom: 20px;
 
-    margin-bottom:20px;
+        }
 
-}
+        label {
 
-label{
+            font-weight: bold;
 
-    font-weight:bold;
-
-}
-
-</style>
+        }
+    </style>
 
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-<h1>
+        <h1>
 
-Create Article
+            Create Article
 
-</h1>
-
-
-<a href="authorDashboard.php">
-
-<button class="backButton">
-
-Back To Dashboard
-
-</button>
-
-</a>
-
-<br><br>
+        </h1>
 
 
-<?php
+        <a href="authorDashboard.php">
 
-if(isset($_GET["success"])){
+            <button class="backButton">
 
-echo "<p class='success'>
+                Back To Dashboard
+
+            </button>
+
+        </a>
+
+        <br><br>
+
+
+        <?php
+
+        if (isset($_GET["success"])) {
+
+            echo "<p class='success'>
 
 Article Created Successfully
 
 </p>";
+        }
 
-}
 
+        if (isset($_GET["error"])) {
 
-if(isset($_GET["error"])){
-
-echo "<p class='error'>
+            echo "<p class='error'>
 
 Failed To Create Article
 
 </p>";
+        }
 
-}
+        ?>
 
-?>
 
+        <form
 
-<form
+            action="../../controllers/articleController.php"
 
-action="../../controllers/articleController.php"
+            method="POST"
 
-method="POST"
+            enctype="multipart/form-data">
 
-enctype="multipart/form-data"
 
->
+            <label>
 
+                Category
 
-<label>
+            </label>
 
-Category
+            <select name="categoryId">
 
-</label>
+                <?php
 
-<select name="categoryId">
+                $result =
+                    $conn->query(
+                        "SELECT * FROM categories"
+                    );
 
-<?php
+                while ($row = $result->fetch_assoc()) {
 
-$result =
-$conn->query(
-"SELECT * FROM categories"
-);
+                ?>
 
-while($row=$result->fetch_assoc()){
+                    <option
+                        value="<?php echo $row['id']; ?>">
 
-?>
+                        <?php echo $row['name']; ?>
 
-<option
-value="<?php echo $row['id']; ?>">
+                    </option>
 
-<?php echo $row['name']; ?>
+                <?php
 
-</option>
+                }
 
-<?php
+                ?>
 
-}
+            </select>
 
-?>
 
-</select>
 
+            <label>
 
+                Series (Optional)
 
-<label>
+            </label>
 
-Series (Optional)
+            <select name="seriesId">
 
-</label>
+                <option value="">
 
-<select name="seriesId">
+                    None
 
-<option value="">
+                </option>
 
-None
+                <?php
 
-</option>
+                $result =
+                    $conn->query(
+                        "SELECT * FROM series"
+                    );
 
-<?php
+                while ($row = $result->fetch_assoc()) {
 
-$result =
-$conn->query(
-"SELECT * FROM series"
-);
+                ?>
 
-while($row=$result->fetch_assoc()){
+                    <option
+                        value="<?php echo $row['id']; ?>">
 
-?>
+                        <?php echo $row['title']; ?>
 
-<option
-value="<?php echo $row['id']; ?>">
+                    </option>
 
-<?php echo $row['title']; ?>
+                <?php
 
-</option>
+                }
 
-<?php
+                ?>
 
-}
+            </select>
 
-?>
 
-</select>
 
+            <label>
 
+                Title
 
-<label>
+            </label>
 
-Title
+            <input
+                type="text"
+                name="title"
+                required>
 
-</label>
 
-<input
-type="text"
-name="title"
-required
->
 
+            <label>
 
+                Excerpt
 
-<label>
+            </label>
 
-Excerpt
+            <textarea
+                name="excerpt"></textarea>
 
-</label>
 
-<textarea
-name="excerpt"
-></textarea>
 
+            <label>
 
+                Body
 
-<label>
+            </label>
 
-Body
+            <textarea
+                name="body"
+                required></textarea>
 
-</label>
 
-<textarea
-name="body"
-required
-></textarea>
 
+            <label>
 
+                Tags
 
-<label>
+            </label>
 
-Tags
+            <input
+                type="text"
+                name="tags"
+                placeholder="php,mysql,ajax">
 
-</label>
 
-<input
-type="text"
-name="tags"
-placeholder="php,mysql,ajax"
->
 
+            <label>
 
+                Featured Image
 
-<label>
+            </label>
 
-Featured Image
+            <input
+                type="file"
+                name="featuredImage">
 
-</label>
 
-<input
-type="file"
-name="featuredImage"
->
 
+            <label>
 
+                Status
 
-<label>
+            </label>
 
-Status
+            <select
+                name="status">
 
-</label>
+                <option value="draft">
 
-<select
-name="status"
->
+                    Draft
 
-<option value="draft">
+                </option>
 
-Draft
+                <option value="submitted">
 
-</option>
+                    Submitted
 
-<option value="submitted">
+                </option>
 
-Submitted
+            </select>
 
-</option>
 
-</select>
+            <button type="submit">
 
+                Create Article
 
-<button type="submit">
+            </button>
 
-Create Article
+        </form>
 
-</button>
-
-</form>
-
-</div>
+    </div>
 
 </body>
 
