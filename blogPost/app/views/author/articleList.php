@@ -3,53 +3,32 @@
 session_start();
 
 include "../../../config/database.php";
-
 include "../../models/articleModel.php";
 
+$authorId = $_SESSION["userId"] ?? 1;
 
-$authorId =
-$_SESSION["userId"] ?? 1;
-
-
-$article =
-new ArticleModel($conn);
+$article = new ArticleModel($conn);
 
 
-// Filter
+// Filter articles
 
-if(
+if (
+    isset($_GET["status"]) &&
+    $_GET["status"] != "all"
+) {
 
-isset($_GET["status"])
+    $status = $_GET["status"];
 
-&&
-
-$_GET["status"]!="all"
-
-){
-
-    $status =
-    $_GET["status"];
-
-
-    $result =
-    $article->filterArticles(
-
+    $result = $article->filterArticles(
         $authorId,
         $status
-
     );
 
-}
+} else {
 
-else{
-
-    $result =
-    $article->getAllArticles(
-
+    $result = $article->getAllArticles(
         $authorId
-
     );
-
 }
 
 ?>
@@ -60,71 +39,63 @@ else{
 
 <head>
 
-<title>
+    <title>My Articles</title>
 
-My Articles
+    <style>
 
-</title>
+        table{
 
-<style>
+            width:100%;
+            border-collapse:collapse;
 
-table{
+        }
 
-width:100%;
-border-collapse:collapse;
+        th,
+        td{
 
-}
+            border:1px solid black;
+            padding:10px;
 
-th,
-td{
+        }
 
-border:1px solid black;
-padding:10px;
+        a{
 
-}
+            text-decoration:none;
+            margin-right:10px;
 
-a{
+        }
 
-text-decoration:none;
-margin-right:10px;
+        button{
 
-}
+            padding:10px 20px;
+            cursor:pointer;
 
-button{
+        }
 
-padding:10px 20px;
-cursor:pointer;
+        input{
 
-}
+            padding:10px;
+            width:300px;
+            margin-bottom:20px;
 
-input{
+        }
 
-padding:10px;
-width:300px;
-margin-bottom:20px;
-
-}
-
-</style>
+    </style>
 
 </head>
 
 <body>
 
-<h1>
-
-My Articles
-
-</h1>
+<h1>My Articles</h1>
 
 
 <a href="authorDashboard.php">
 
-<button>
+    <button>
 
-Back To Dashboard
+        Back To Dashboard
 
-</button>
+    </button>
 
 </a>
 
@@ -132,53 +103,36 @@ Back To Dashboard
 
 
 <input
-
-type="text"
-
-id="searchBox"
-
-placeholder="Search article..."
-
-onkeyup="searchArticle()"
-
+    type="text"
+    id="searchBox"
+    placeholder="Search article..."
+    onkeyup="searchArticle()"
 >
 
 <br><br>
 
 
-<a href="articleList.php?status=all">
+<a href="articleList.php?status=all">All</a> |
 
-All
+<a href="articleList.php?status=draft">Draft</a> |
 
-</a> |
-
-<a href="articleList.php?status=draft">
-
-Draft
-
-</a> |
-
-<a href="articleList.php?status=submitted">
-
-Submitted
-
-</a> |
+<a href="articleList.php?status=submitted">Submitted</a> |
 
 <a href="articleList.php?status=revision_requested">
 
-Revision Requested
+    Revision Requested
 
 </a> |
 
 <a href="articleList.php?status=published">
 
-Published
+    Published
 
 </a> |
 
 <a href="articleList.php?status=unpublished">
 
-Unpublished
+    Unpublished
 
 </a>
 
@@ -189,17 +143,17 @@ Unpublished
 
 <tr>
 
-<th>ID</th>
+    <th>ID</th>
 
-<th>Title</th>
+    <th>Title</th>
 
-<th>Status</th>
+    <th>Status</th>
 
-<th>Editor Feedback</th>
+    <th>Editor Feedback</th>
 
-<th>Created</th>
+    <th>Created</th>
 
-<th>Action</th>
+    <th>Action</th>
 
 </tr>
 
@@ -209,10 +163,7 @@ Unpublished
 <?php
 
 while(
-
-$row =
-$result->fetch_assoc()
-
+    $row = $result->fetch_assoc()
 ){
 
 ?>
@@ -221,25 +172,25 @@ $result->fetch_assoc()
 
 <td>
 
-<?php echo $row["id"]; ?>
+    <?php echo $row["id"]; ?>
 
 </td>
 
 
 <td>
 
-<a href="viewArticle.php?articleId=<?php echo $row["id"]; ?>">
+    <a href="viewArticle.php?articleId=<?php echo $row["id"]; ?>">
 
-<?php echo $row["title"]; ?>
+        <?php echo $row["title"]; ?>
 
-</a>
+    </a>
 
 </td>
 
 
 <td>
 
-<?php echo $row["status"]; ?>
+    <?php echo $row["status"]; ?>
 
 </td>
 
@@ -249,18 +200,14 @@ $result->fetch_assoc()
 <?php
 
 if(
-
-$row["status"]=="revision_requested"
-
+    $row["status"] == "revision_requested"
 ){
 
-echo $row["editor_feedback"];
+    echo $row["editor_feedback"];
 
-}
+}else{
 
-else{
-
-echo "-";
+    echo "-";
 
 }
 
@@ -271,7 +218,7 @@ echo "-";
 
 <td>
 
-<?php echo $row["created_at"]; ?>
+    <?php echo $row["created_at"]; ?>
 
 </td>
 
@@ -281,20 +228,16 @@ echo "-";
 <?php
 
 if(
-
-$row["status"]=="draft"
-
-||
-
-$row["status"]=="revision_requested"
-
+    $row["status"] == "draft"
+    ||
+    $row["status"] == "revision_requested"
 ){
 
 ?>
 
 <a href="editArticle.php?articleId=<?php echo $row["id"]; ?>">
 
-Edit
+    Edit
 
 </a>
 
@@ -304,18 +247,14 @@ Edit
 <?php
 
 if(
-
-$row["status"]=="revision_requested"
-
+    $row["status"] == "revision_requested"
 ){
 
-echo "Resubmit";
+    echo "Resubmit";
 
-}
+}else{
 
-else{
-
-echo "Submit";
+    echo "Submit";
 
 }
 
@@ -332,7 +271,14 @@ echo "Submit";
 
 <a href="revisionHistory.php?articleId=<?php echo $row["id"]; ?>">
 
-Revisions
+    Revisions
+
+</a>
+
+
+<a href="articleAnalytics.php?articleId=<?php echo $row["id"]; ?>">
+
+    Analytics
 
 </a>
 
@@ -340,16 +286,14 @@ Revisions
 <?php
 
 if(
-
-$row["status"]=="published"
-
+    $row["status"] == "published"
 ){
 
 ?>
 
 <a href="../../controllers/articleController.php?unpublish=<?php echo $row["id"]; ?>">
 
-Unpublish
+    Unpublish
 
 </a>
 
@@ -378,42 +322,36 @@ Unpublish
 
 function searchArticle(){
 
-let keyword =
-
-document.getElementById(
-"searchBox"
-).value;
+    let keyword = document.getElementById(
+        "searchBox"
+    ).value;
 
 
-let xhr =
-
-new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
 
 
-xhr.open(
+    xhr.open(
 
-"GET",
+        "GET",
 
-"../../../ajax/searchArticles.php?keyword="
-+
-keyword,
+        "../../../ajax/searchArticles.php?keyword="
+        + keyword,
 
-true
+        true
 
-);
-
-
-xhr.onload = function(){
-
-document.getElementById(
-"articleTable"
-).innerHTML =
-this.responseText;
-
-};
+    );
 
 
-xhr.send();
+    xhr.onload = function(){
+
+        document.getElementById(
+            "articleTable"
+        ).innerHTML = this.responseText;
+
+    };
+
+
+    xhr.send();
 
 }
 

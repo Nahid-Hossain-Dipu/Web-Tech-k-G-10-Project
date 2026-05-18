@@ -3,36 +3,20 @@
 session_start();
 
 include "../config/database.php";
-
 include "../app/models/articleModel.php";
 
+$authorId = $_SESSION["userId"] ?? 1;
 
-$authorId =
-$_SESSION["userId"] ?? 1;
+$keyword = $_GET["keyword"] ?? "";
 
-$keyword =
-$_GET["keyword"] ?? "";
+$article = new ArticleModel($conn);
 
-
-$article =
-new ArticleModel($conn);
-
-
-$result =
-$article->searchArticles(
-
+$result = $article->searchArticles(
     $authorId,
     $keyword
-
 );
 
-
-while(
-
-$row =
-$result->fetch_assoc()
-
-){
+while($row = $result->fetch_assoc()){
 
 ?>
 
@@ -67,19 +51,13 @@ $result->fetch_assoc()
 
 <?php
 
-if(
+if($row["status"]=="revision_requested"){
 
-$row["status"]=="revision_requested"
+    echo $row["editor_feedback"];
 
-){
+}else{
 
-echo $row["editor_feedback"];
-
-}
-
-else{
-
-echo "-";
+    echo "-";
 
 }
 
@@ -100,13 +78,9 @@ echo "-";
 <?php
 
 if(
-
-$row["status"]=="draft"
-
-||
-
-$row["status"]=="revision_requested"
-
+    $row["status"]=="draft"
+    ||
+    $row["status"]=="revision_requested"
 ){
 
 ?>
@@ -122,19 +96,13 @@ Edit
 
 <?php
 
-if(
+if($row["status"]=="revision_requested"){
 
-$row["status"]=="revision_requested"
+    echo "Resubmit";
 
-){
+}else{
 
-echo "Resubmit";
-
-}
-
-else{
-
-echo "Submit";
+    echo "Submit";
 
 }
 
@@ -156,13 +124,16 @@ Revisions
 </a>
 
 
+<a href="articleAnalytics.php?articleId=<?php echo $row["id"]; ?>">
+
+Analytics
+
+</a>
+
+
 <?php
 
-if(
-
-$row["status"]=="published"
-
-){
+if($row["status"]=="published"){
 
 ?>
 

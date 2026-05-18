@@ -1,83 +1,84 @@
 <?php
 
-class EditorController{
+class EditorController
+{
 
 
-    function dashboard(){
+    function dashboard()
+    {
 
         $article =
-        new Article();
+            new Article();
 
         $data = [
 
-        "submitted" =>
+            "submitted" =>
 
-        mysqli_fetch_assoc(
+            mysqli_fetch_assoc(
 
-        $article
-        ->getSubmittedCount()
+                $article
+                    ->getSubmittedCount()
 
-        ),
+            ),
 
-        "approved" =>
+            "approved" =>
 
-        mysqli_fetch_assoc(
+            mysqli_fetch_assoc(
 
-        $article
-        ->getApprovedCount()
+                $article
+                    ->getApprovedCount()
 
-        ),
+            ),
 
-        "scheduled" =>
+            "scheduled" =>
 
-        mysqli_fetch_assoc(
+            mysqli_fetch_assoc(
 
-        $article
-        ->getScheduledCount()
+                $article
+                    ->getScheduledCount()
 
-        ),
+            ),
 
-        "published" =>
+            "published" =>
 
-        mysqli_fetch_assoc(
+            mysqli_fetch_assoc(
 
-        $article
-        ->getPublishedCount()
+                $article
+                    ->getPublishedCount()
 
-        )
+            )
 
         ];
 
         return $data;
-
     }
 
 
 
-    function queue(){
+    function queue()
+    {
 
         $article =
-        new Article();
+            new Article();
 
         return
-        $article
-        ->getQueueArticles();
-
+            $article
+            ->getQueueArticles();
     }
 
 
 
-    function review($id){
+    function review($id)
+    {
 
         $article =
-        new Article();
+            new Article();
 
         return
-        $article
-        ->getArticleById(
-            $id
-        );
-
+            $article
+            ->getArticleById(
+                $id
+            );
     }
 
 
@@ -86,37 +87,33 @@ class EditorController{
         $id,
         $status,
         $feedback
-    ){
+    ) {
 
         $article =
-        new Article();
+            new Article();
 
         return
-        $article
-        ->updateArticleStatus(
+            $article
+            ->updateArticleStatus(
 
-            $id,
+                $id,
 
-            $status,
+                $status,
 
-            $feedback
+                $feedback
 
-        );
-
+            );
     }
-    function tags($id){
+    function tags($id)
+    {
 
-    $article=
-    new Article();
+        $article =
+            new Article();
 
-    return
-    $article
-    ->getTags(
-        $id
-    );
-
+        return
+            $article
+            ->getTags(
+                $id
+            );
+    }
 }
-
-}
-
-?>

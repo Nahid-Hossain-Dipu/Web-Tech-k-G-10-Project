@@ -10,17 +10,17 @@ include "../models/revisionModel.php";
 
 
 $article =
-new ArticleModel($conn);
+    new ArticleModel($conn);
 
 $revision =
-new RevisionModel($conn);
+    new RevisionModel($conn);
 
 
 
-if(isset($_GET["unpublish"])){
+if (isset($_GET["unpublish"])) {
 
     $articleId =
-    (int)$_GET["unpublish"];
+        (int)$_GET["unpublish"];
 
 
     $article->unpublishArticle(
@@ -32,19 +32,18 @@ if(isset($_GET["unpublish"])){
 
     header(
 
-"Location:../views/author/articleList.php"
+        "Location:../views/author/articleList.php"
 
     );
 
     exit();
-
 }
 
 
-if(isset($_GET["submit"])){
+if (isset($_GET["submit"])) {
 
     $articleId =
-    (int)$_GET["submit"];
+        (int)$_GET["submit"];
 
 
     $article->submitArticle(
@@ -56,92 +55,91 @@ if(isset($_GET["submit"])){
 
     header(
 
-"Location:../views/author/articleList.php"
+        "Location:../views/author/articleList.php"
 
     );
 
     exit();
-
 }
 
 
 /* CREATE ARTICLE */
 
-if(
+if (
 
-$_SERVER["REQUEST_METHOD"]=="POST"
+    $_SERVER["REQUEST_METHOD"] == "POST"
 
-&&
+    &&
 
-!isset($_POST["updateArticle"])
+    !isset($_POST["updateArticle"])
 
-){
+) {
 
     $authorId =
-    $_SESSION["userId"] ?? 1;
+        $_SESSION["userId"] ?? 1;
 
     $categoryId =
-    $_POST["categoryId"];
+        $_POST["categoryId"];
 
     $seriesId =
-    !empty($_POST["seriesId"])
-    ?
-    $_POST["seriesId"]
-    :
-    NULL;
+        !empty($_POST["seriesId"])
+        ?
+        $_POST["seriesId"]
+        :
+        NULL;
 
 
     $title =
-    $_POST["title"];
+        $_POST["title"];
 
     $body =
-    $_POST["body"];
+        $_POST["body"];
 
     $excerpt =
-    $_POST["excerpt"];
+        $_POST["excerpt"];
 
     $tags =
-    $_POST["tags"];
+        $_POST["tags"];
 
     $status =
-    $_POST["status"];
+        $_POST["status"];
 
 
 
     $slug =
-    strtolower(
+        strtolower(
 
-        str_replace(
-            " ",
-            "-",
-            $title
-        )
+            str_replace(
+                " ",
+                "-",
+                $title
+            )
 
-    );
+        );
 
 
 
     // IMAGE UPLOAD
 
     $imageName =
-    $_FILES["featuredImage"]["name"];
+        $_FILES["featuredImage"]["name"];
 
     $tempName =
-    $_FILES["featuredImage"]["tmp_name"];
+        $_FILES["featuredImage"]["tmp_name"];
 
 
     $featuredImagePath =
-    "uploads/articleImages/"
-    .
-    $imageName;
+        "uploads/articleImages/"
+        .
+        $imageName;
 
 
     $uploadPath =
-    __DIR__
-    .
-    "/../../"
-    .
-    $featuredImagePath;
+        __DIR__
+        .
+        "/../../"
+        .
+        $featuredImagePath;
 
 
     move_uploaded_file(
@@ -154,7 +152,7 @@ $_SERVER["REQUEST_METHOD"]=="POST"
 
 
 
-    if(
+    if (
 
         $article->createArticle(
 
@@ -171,56 +169,54 @@ $_SERVER["REQUEST_METHOD"]=="POST"
 
         )
 
-    ){
+    ) {
 
         header(
 
-"Location:../views/author/createArticle.php?success=1"
+            "Location:../views/author/createArticle.php?success=1"
 
         );
 
         exit();
-
     }
-
 }
 
 
 
 /* UPDATE ARTICLE */
 
-if(
+if (
 
-isset($_POST["updateArticle"])
+    isset($_POST["updateArticle"])
 
-){
+) {
 
     $authorId =
-    $_SESSION["userId"] ?? 1;
+        $_SESSION["userId"] ?? 1;
 
 
     $articleId =
-    $_POST["articleId"];
+        $_POST["articleId"];
 
 
     $title =
-    $_POST["title"];
+        $_POST["title"];
 
 
     $body =
-    $_POST["body"];
+        $_POST["body"];
 
 
     $excerpt =
-    $_POST["excerpt"];
+        $_POST["excerpt"];
 
 
     $tags =
-    $_POST["tags"];
+        $_POST["tags"];
 
 
     $status =
-    $_POST["status"];
+        $_POST["status"];
 
 
 
@@ -228,16 +224,16 @@ isset($_POST["updateArticle"])
 
     $oldArticle =
 
-    $article->getArticle(
+        $article->getArticle(
 
-        $articleId
+            $articleId
 
-    );
+        );
 
 
     $row =
 
-    $oldArticle->fetch_assoc();
+        $oldArticle->fetch_assoc();
 
 
 
@@ -257,41 +253,39 @@ isset($_POST["updateArticle"])
 
     $featuredImagePath =
 
-    $row["featured_image_path"];
+        $row["featured_image_path"];
 
 
 
     // Upload new image
 
-    if(
+    if (
 
-    !empty(
-    $_FILES["featuredImage"]["name"]
-    )
+        !empty($_FILES["featuredImage"]["name"])
 
-    ){
+    ) {
 
         $imageName =
-        $_FILES["featuredImage"]["name"];
+            $_FILES["featuredImage"]["name"];
 
 
         $tempName =
-        $_FILES["featuredImage"]["tmp_name"];
+            $_FILES["featuredImage"]["tmp_name"];
 
 
         $featuredImagePath =
-        "uploads/articleImages/"
-        .
-        $imageName;
+            "uploads/articleImages/"
+            .
+            $imageName;
 
 
 
         $uploadPath =
-        __DIR__
-        .
-        "/../../"
-        .
-        $featuredImagePath;
+            __DIR__
+            .
+            "/../../"
+            .
+            $featuredImagePath;
 
 
 
@@ -302,7 +296,6 @@ isset($_POST["updateArticle"])
             $uploadPath
 
         );
-
     }
 
 
@@ -325,12 +318,9 @@ isset($_POST["updateArticle"])
 
     header(
 
-"Location:../views/author/articleList.php"
+        "Location:../views/author/articleList.php"
 
     );
 
     exit();
-
 }
-
-?>
