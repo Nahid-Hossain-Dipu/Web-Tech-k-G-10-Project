@@ -1,6 +1,5 @@
 <?php
-
-session_start();
+include "../../middleware/authorOnly.php";
 
 include "../../../config/database.php";
 
@@ -9,8 +8,7 @@ include "../../models/articleModel.php";
 include "../../models/authorUserModel.php";
 
 
-$authorId =
-$_SESSION["userId"] ?? 1;
+$authorId = $_SESSION["userId"];
 
 
 /* User Profile */
@@ -269,6 +267,16 @@ My Articles
 
 </a>
 
+
+<a href="../../controllers/authorLogout.php">
+
+<button>
+
+Logout
+
+</button>
+
+</a>
 </div>
 
 

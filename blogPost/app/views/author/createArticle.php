@@ -1,3 +1,8 @@
+<?php
+include "../../middleware/authorOnly.php";
+include "../../../config/database.php";
+?>
+
 <!DOCTYPE html>
 
 <html>
@@ -96,13 +101,9 @@ enctype="multipart/form-data"
 
 include "../../../config/database.php";
 
-$result =
-$conn->query(
-"SELECT * FROM categories"
-);
+$result = $conn->query("SELECT * FROM categories");
 
-while($row=
-$result->fetch_assoc()){
+while($row=$result->fetch_assoc()){
 
 ?>
 
