@@ -192,12 +192,7 @@ placeholder="php,mysql,ajax"
 
 <label>Featured Image</label>
 
-<input
-type="file"
-name="featuredImage"
->
-
-
+<input type="file" name="featuredImage">
 
 <label>Status</label>
 
