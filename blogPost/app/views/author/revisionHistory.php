@@ -1,5 +1,5 @@
 <?php
-
+include "../../middleware/authorOnly.php";
 include "../../../config/database.php";
 
 include "../../models/revisionModel.php";

@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+include "../../middleware/authorOnly.php";
 
 include "../../../config/database.php";
 
