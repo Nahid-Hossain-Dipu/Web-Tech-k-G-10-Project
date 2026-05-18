@@ -389,6 +389,68 @@ class ArticleModel{
 
 }
 
+public function getAnalytics(
+
+    $articleId
+
+){
+
+    $sql = "
+
+    SELECT
+
+    a.view_count,
+
+    (
+        SELECT COUNT(*)
+
+        FROM article_likes
+
+        WHERE article_id=?
+    )
+
+    AS totalLikes,
+
+
+    (
+        SELECT COUNT(*)
+
+        FROM comments
+
+        WHERE article_id=?
+    )
+
+    AS totalComments
+
+
+    FROM articles a
+
+    WHERE a.id=?
+
+    ";
+
+
+    $stmt =
+    $this->conn->prepare($sql);
+
+
+    $stmt->bind_param(
+
+        "iii",
+
+        $articleId,
+        $articleId,
+        $articleId
+
+    );
+
+
+    $stmt->execute();
+
+    return $stmt->get_result();
+
+}
+
 }
 
 ?>
