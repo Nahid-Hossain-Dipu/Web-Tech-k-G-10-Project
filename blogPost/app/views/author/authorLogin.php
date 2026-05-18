@@ -2,6 +2,9 @@
 
 session_start();
 
+$username = $_COOKIE["username"] ?? "";
+$password = $_COOKIE["password"] ?? "";
+
 ?>
 
 <!DOCTYPE html>
@@ -76,6 +79,19 @@ button:hover{
 
 }
 
+.remember{
+
+    margin-top:10px;
+    margin-bottom:20px;
+
+}
+
+.remember input{
+
+    width:auto;
+
+}
+
 </style>
 
 </head>
@@ -104,6 +120,7 @@ Username
 <input
 type="text"
 name="username"
+value="<?php echo $username; ?>"
 required
 >
 
@@ -117,8 +134,21 @@ Password
 <input
 type="password"
 name="password"
+value=""
 required
 >
+
+
+<div class="remember">
+
+<input
+type="checkbox"
+name="remember"
+>
+
+Remember Me
+
+</div>
 
 
 <button type="submit">

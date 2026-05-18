@@ -27,7 +27,8 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     ){
 
         if(
-            $user["role"]=="author" &&
+            $user["role"]=="author"
+            &&
             $user["is_author_approved"]==0
         ){
 
@@ -37,9 +38,50 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 
         }
 
+
+        /* Remember Me */
+
+        if(isset($_POST["remember"])){
+
+            setcookie(
+
+                "username",
+
+                $username,
+
+                time() + (86400 * 30),
+
+                "/"
+
+            );
+        }
+
+        else{
+
+            setcookie(
+
+                "username",
+
+                "",
+
+                time()-3600,
+
+                "/"
+
+            );
+        }
+
+
+        /* Session */
+
         $_SESSION["userId"] = $user["id"];
+
         $_SESSION["role"] = $user["role"];
+
         $_SESSION["name"] = $user["name"];
+
+
+        /* Redirect */
 
         if($user["role"]=="author"){
 
@@ -47,13 +89,17 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                 "Location:../views/author/authorDashboard.php"
             );
 
-        }elseif($user["role"]=="editor"){
+        }
+
+        elseif($user["role"]=="editor"){
 
             header(
                 "Location:../views/editor/editorDashboard.php"
             );
 
-        }else{
+        }
+
+        else{
 
             header(
                 "Location:../views/admin/adminDashboard.php"
@@ -63,7 +109,9 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 
         exit();
 
-    }else{
+    }
+
+    else{
 
         echo "Invalid Username or Password";
 
