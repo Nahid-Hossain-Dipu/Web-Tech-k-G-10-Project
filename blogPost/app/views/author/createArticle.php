@@ -1,6 +1,8 @@
 <?php
+
 include "../../middleware/authorOnly.php";
 include "../../../config/database.php";
+
 ?>
 
 <!DOCTYPE html>
@@ -9,36 +11,97 @@ include "../../../config/database.php";
 
 <head>
 
-<title>Create Article</title>
+<title>
+
+Create Article
+
+</title>
 
 <style>
 
 body{
-font-family:Arial;
-margin:40px;
+
+    font-family:Arial;
+    margin:40px;
+    background-color:#f5f5f5;
+
+}
+
+.container{
+
+    width:70%;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border:1px solid lightgray;
+
+}
+
+h1{
+    text-align: center;
+
+    color:black;
+
 }
 
 input,
 textarea,
 select{
 
-width:100%;
-padding:10px;
-margin-top:10px;
-margin-bottom:20px;
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    margin-bottom:20px;
+    border:1px solid gray;
 
 }
 
 textarea{
-height:200px;
+
+    height:200px;
+
+}
+
+button{
+
+    padding:10px 20px;
+    background-color:grey;
+    color:white;
+    border:none;
+    cursor:pointer;
+
+}
+
+button:hover{
+
+    background-color:black;
+
 }
 
 .success{
-color:green;
+
+    color:green;
+    font-weight:bold;
+
 }
 
 .error{
-color:red;
+
+    color:red;
+    font-weight:bold;
+
+}
+
+.backButton{
+
+    margin-bottom:20px;
+
+}
+
+label{
+
+    font-weight:bold;
+
 }
 
 </style>
@@ -47,11 +110,18 @@ color:red;
 
 <body>
 
-<h1>Create Article</h1>
+<div class="container">
+
+<h1>
+
+Create Article
+
+</h1>
+
 
 <a href="authorDashboard.php">
 
-<button>
+<button class="backButton">
 
 Back To Dashboard
 
@@ -67,15 +137,20 @@ Back To Dashboard
 if(isset($_GET["success"])){
 
 echo "<p class='success'>
+
 Article Created Successfully
+
 </p>";
 
 }
 
+
 if(isset($_GET["error"])){
 
 echo "<p class='error'>
+
 Failed To Create Article
+
 </p>";
 
 }
@@ -93,15 +168,21 @@ enctype="multipart/form-data"
 
 >
 
-<label>Category</label>
+
+<label>
+
+Category
+
+</label>
 
 <select name="categoryId">
 
 <?php
 
-include "../../../config/database.php";
-
-$result = $conn->query("SELECT * FROM categories");
+$result =
+$conn->query(
+"SELECT * FROM categories"
+);
 
 while($row=$result->fetch_assoc()){
 
@@ -114,18 +195,28 @@ value="<?php echo $row['id']; ?>">
 
 </option>
 
-<?php } ?>
+<?php
+
+}
+
+?>
 
 </select>
 
 
 
-<label>Series (Optional)</label>
+<label>
+
+Series (Optional)
+
+</label>
 
 <select name="seriesId">
 
 <option value="">
+
 None
+
 </option>
 
 <?php
@@ -135,8 +226,7 @@ $conn->query(
 "SELECT * FROM series"
 );
 
-while($row=
-$result->fetch_assoc()){
+while($row=$result->fetch_assoc()){
 
 ?>
 
@@ -147,13 +237,21 @@ value="<?php echo $row['id']; ?>">
 
 </option>
 
-<?php } ?>
+<?php
+
+}
+
+?>
 
 </select>
 
 
 
-<label>Title</label>
+<label>
+
+Title
+
+</label>
 
 <input
 type="text"
@@ -163,7 +261,11 @@ required
 
 
 
-<label>Excerpt</label>
+<label>
+
+Excerpt
+
+</label>
 
 <textarea
 name="excerpt"
@@ -171,7 +273,11 @@ name="excerpt"
 
 
 
-<label>Body</label>
+<label>
+
+Body
+
+</label>
 
 <textarea
 name="body"
@@ -180,7 +286,11 @@ required
 
 
 
-<label>Tags</label>
+<label>
+
+Tags
+
+</label>
 
 <input
 type="text"
@@ -190,22 +300,39 @@ placeholder="php,mysql,ajax"
 
 
 
-<label>Featured Image</label>
+<label>
 
-<input type="file" name="featuredImage">
+Featured Image
 
-<label>Status</label>
+</label>
+
+<input
+type="file"
+name="featuredImage"
+>
+
+
+
+<label>
+
+Status
+
+</label>
 
 <select
 name="status"
 >
 
 <option value="draft">
+
 Draft
+
 </option>
 
 <option value="submitted">
+
 Submitted
+
 </option>
 
 </select>
@@ -218,6 +345,8 @@ Create Article
 </button>
 
 </form>
+
+</div>
 
 </body>
 

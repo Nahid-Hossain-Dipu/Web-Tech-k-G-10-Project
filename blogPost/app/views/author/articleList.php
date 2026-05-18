@@ -1,21 +1,21 @@
 <?php
 
 include "../../middleware/authorOnly.php";
-
 include "../../../config/database.php";
 include "../../models/articleModel.php";
 
-$authorId = $_SESSION["userId"] ?? 1;
+$authorId = $_SESSION["userId"];
 
 $article = new ArticleModel($conn);
 
 
-// Filter articles
+/* Filter Articles */
 
-if (
-    isset($_GET["status"]) &&
-    $_GET["status"] != "all"
-) {
+if(
+    isset($_GET["status"])
+    &&
+    $_GET["status"]!="all"
+){
 
     $status = $_GET["status"];
 
@@ -24,11 +24,12 @@ if (
         $status
     );
 
-} else {
+}else{
 
     $result = $article->getAllArticles(
         $authorId
     );
+
 }
 
 ?>
@@ -39,63 +40,119 @@ if (
 
 <head>
 
-    <title>My Articles</title>
+<title>
 
-    <style>
+My Articles
 
-        table{
+</title>
 
-            width:100%;
-            border-collapse:collapse;
+<style>
 
-        }
+body{
 
-        th,
-        td{
+    font-family:Arial;
+    margin:40px;
+    background-color:#f5f5f5;
 
-            border:1px solid black;
-            padding:10px;
+}
 
-        }
+h1{
+    text-align: center;
 
-        a{
+    color:black;
 
-            text-decoration:none;
-            margin-right:10px;
+}
+.categories a {
+    color: grey;
+}
+.categories:hover{
+    color: white;
+}
 
-        }
+table{
 
-        button{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
 
-            padding:10px 20px;
-            cursor:pointer;
+}
 
-        }
+th{
 
-        input{
+    background-color:black;
+    color:white;
+    padding:10px;
 
-            padding:10px;
-            width:300px;
-            margin-bottom:20px;
+}
 
-        }
+td{
 
-    </style>
+    border:1px solid gray;
+    padding:10px;
+
+}
+
+a{
+
+    text-decoration:none;
+    color:black;
+    margin-right:10px;
+
+}
+
+
+button{
+
+    padding:10px;
+    background-color:black;
+    color:white;
+    border:none;
+    cursor:pointer;
+
+}
+
+input{
+
+    padding:10px;
+    width:300px;
+    border:1px solid gray;
+
+}
+
+.filter{
+
+    margin-bottom:20px;
+
+}
+
+.filter a{  
+
+    background-color:grey;
+    padding:8px;
+    border-radius:5px;
+
+}
+
+</style>
 
 </head>
 
 <body>
 
-<h1>My Articles</h1>
+<h1>
+
+My Articles
+
+</h1>
 
 
 <a href="authorDashboard.php">
 
-    <button>
+<button>
 
-        Back To Dashboard
+Back To Dashboard
 
-    </button>
+</button>
 
 </a>
 
@@ -103,57 +160,71 @@ if (
 
 
 <input
-    type="text"
-    id="searchBox"
-    placeholder="Search article..."
-    onkeyup="searchArticle()"
+type="text"
+id="searchBox"
+placeholder="Search article..."
+onkeyup="searchArticle()"
 >
 
 <br><br>
 
 
-<a href="articleList.php?status=all">All</a> |
+<div class="filter">
 
-<a href="articleList.php?status=draft">Draft</a> |
+<a class="categories" href="articleList.php?status=all">
 
-<a href="articleList.php?status=submitted">Submitted</a> |
-
-<a href="articleList.php?status=revision_requested">
-
-    Revision Requested
-
-</a> |
-
-<a href="articleList.php?status=published">
-
-    Published
-
-</a> |
-
-<a href="articleList.php?status=unpublished">
-
-    Unpublished
+All
 
 </a>
 
-<br><br>
+<a class="categories" href="articleList.php?status=draft">
+
+Draft
+
+</a>
+
+<a class="categories" href="articleList.php?status=submitted">
+
+Submitted
+
+</a>
+
+<a class="categories" href="articleList.php?status=revision_requested">
+
+Revision Requested
+
+</a>
+
+<a class="categories" href="articleList.php?status=published">
+
+Published
+
+</a>
+
+<a class="categories" href="articleList.php?status=unpublished">
+
+Unpublished
+
+</a>
+
+</div>
 
 
 <table>
 
 <tr>
 
-    <th>ID</th>
+<th>ID</th>
 
-    <th>Title</th>
+<th>Title</th>
 
-    <th>Status</th>
+<th>Status</th>
 
-    <th>Editor Feedback</th>
+<th>Editor Feedback</th>
 
-    <th>Created</th>
+<th>Created</th>
 
-    <th>Action</th>
+<th>Action</th>
 
 </tr>
 
@@ -162,9 +233,7 @@ if (
 
 <?php
 
-while(
-    $row = $result->fetch_assoc()
-){
+while($row = $result->fetch_assoc()){
 
 ?>
 
@@ -172,25 +241,25 @@ while(
 
 <td>
 
-    <?php echo $row["id"]; ?>
+<?php echo $row["id"]; ?>
 
 </td>
 
 
 <td>
 
-    <a href="viewArticle.php?articleId=<?php echo $row["id"]; ?>">
+<a href="viewArticle.php?articleId=<?php echo $row["id"]; ?>">
 
-        <?php echo $row["title"]; ?>
+<?php echo $row["title"]; ?>
 
-    </a>
+</a>
 
 </td>
 
 
 <td>
 
-    <?php echo $row["status"]; ?>
+<?php echo $row["status"]; ?>
 
 </td>
 
@@ -199,9 +268,7 @@ while(
 
 <?php
 
-if(
-    $row["status"] == "revision_requested"
-){
+if($row["status"]=="revision_requested"){
 
     echo $row["editor_feedback"];
 
@@ -218,7 +285,7 @@ if(
 
 <td>
 
-    <?php echo $row["created_at"]; ?>
+<?php echo $row["created_at"]; ?>
 
 </td>
 
@@ -228,16 +295,16 @@ if(
 <?php
 
 if(
-    $row["status"] == "draft"
+    $row["status"]=="draft"
     ||
-    $row["status"] == "revision_requested"
+    $row["status"]=="revision_requested"
 ){
 
 ?>
 
 <a href="editArticle.php?articleId=<?php echo $row["id"]; ?>">
 
-    Edit
+Edit
 
 </a>
 
@@ -246,9 +313,7 @@ if(
 
 <?php
 
-if(
-    $row["status"] == "revision_requested"
-){
+if($row["status"]=="revision_requested"){
 
     echo "Resubmit";
 
@@ -268,19 +333,19 @@ if(
 
 ?>
 
-
 <a href="revisionHistory.php?articleId=<?php echo $row["id"]; ?>">
 
-    Revisions
+Revisions
 
 </a>
 
 
 <a href="articleAnalytics.php?articleId=<?php echo $row["id"]; ?>">
 
-    Analytics
+Analytics
 
 </a>
+
 
 <a href="articleComments.php?articleId=<?php echo $row["id"]; ?>">
 
@@ -291,15 +356,13 @@ Comments
 
 <?php
 
-if(
-    $row["status"] == "published"
-){
+if($row["status"]=="published"){
 
 ?>
 
 <a href="../../controllers/articleController.php?unpublish=<?php echo $row["id"]; ?>">
 
-    Unpublish
+Unpublish
 
 </a>
 
@@ -328,12 +391,14 @@ if(
 
 function searchArticle(){
 
-    let keyword = document.getElementById(
+    let keyword =
+    document.getElementById(
         "searchBox"
     ).value;
 
 
-    let xhr = new XMLHttpRequest();
+    let xhr =
+    new XMLHttpRequest();
 
 
     xhr.open(
@@ -341,18 +406,20 @@ function searchArticle(){
         "GET",
 
         "../../../ajax/searchArticles.php?keyword="
-        + keyword,
+        +
+        keyword,
 
         true
 
     );
 
 
-    xhr.onload = function(){
+    xhr.onload=function(){
 
         document.getElementById(
             "articleTable"
-        ).innerHTML = this.responseText;
+        ).innerHTML=
+        this.responseText;
 
     };
 
