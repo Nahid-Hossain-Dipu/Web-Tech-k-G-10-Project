@@ -13,153 +13,106 @@ $password = $_COOKIE["password"] ?? "";
 
 <head>
 
-<title>
+    <title>Author Login</title>
 
-Author Login
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f5f5f5;
+            margin: 0;
+        }
 
-</title>
+        .loginBox {
+            width: 350px;
+            margin: 100px auto;
+            background: white;
+            padding: 30px;
+            border: 1px solid lightgray;
+        }
 
-<style>
+        h1 {
+            color: black;
+            text-align: center;
+        }
 
-body{
+        label {
+            font-weight: bold;
+        }
 
-    font-family:Arial;
-    background-color:#f5f5f5;
-    margin:0;
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 1px solid gray;
+        }
 
-}
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: grey;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
 
-.loginBox{
+        button:hover {
+            background-color: black;
+        }
 
-    width:350px;
-    margin:100px auto;
-    background:white;
-    padding:30px;
-    border:1px solid lightgray;
+        .remember {
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
 
-}
-
-h1{
-
-    color:black;
-    text-align:center;
-
-}
-
-label{
-
-    font-weight:bold;
-
-}
-
-input{
-
-    width:100%;
-    padding:10px;
-    margin-top:10px;
-    margin-bottom:20px;
-    border:1px solid gray;
-
-}
-
-button{
-
-    width:100%;
-    padding:10px;
-    background-color:grey;
-    color:white;
-    border:none;
-    cursor:pointer;
-
-}
-
-button:hover{
-
-    background-color:black;
-
-}
-
-.remember{
-
-    margin-top:10px;
-    margin-bottom:20px;
-
-}
-
-.remember input{
-
-    width:auto;
-
-}
-
-</style>
+        .remember input {
+            width: auto;
+        }
+    </style>
 
 </head>
 
 <body>
 
-<div class="loginBox">
+    <div class="loginBox">
 
-<h1>
+        <h1>Author Login</h1>
 
-Author Login
+        <form action="../../controllers/authController.php" method="POST">
 
-</h1>
+            <label>Username</label>
 
-<form
-action="../../controllers/authController.php"
-method="POST"
->
+            <input
+                type="text"
+                name="username"
+                value="<?php echo $username; ?>"
+                required>
 
-<label>
+            <label>Password</label>
 
-Username
+            <input
+                type="password"
+                name="password"
+                value="<?php echo $password; ?>"
+                required>
 
-</label>
+            <div class="remember">
 
-<input
-type="text"
-name="username"
-value="<?php echo $username; ?>"
-required
->
+                <input type="checkbox" name="remember">
 
+                Remember Me
 
-<label>
+            </div>
 
-Password
+            <button type="submit">
 
-</label>
+                Login
 
-<input
-type="password"
-name="password"
-value=""
-required
->
+            </button>
 
+        </form>
 
-<div class="remember">
-
-<input
-type="checkbox"
-name="remember"
->
-
-Remember Me
-
-</div>
-
-
-<button type="submit">
-
-Login
-
-</button>
-
-</form>
-
-</div>
+    </div>
 
 </body>
 

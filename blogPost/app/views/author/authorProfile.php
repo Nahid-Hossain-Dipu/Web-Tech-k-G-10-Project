@@ -8,9 +8,7 @@ $userId = $_SESSION["userId"];
 
 $user = new AuthorUserModel($conn);
 
-$result = $user->getUser(
-    $userId
-);
+$result = $user->getUser($userId);
 
 $row = $result->fetch_assoc();
 
@@ -27,137 +25,102 @@ $social = json_decode(
 
 <head>
 
-<title>Author Profile</title>
+    <title>Author Profile</title>
 
-<style>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 40px;
+        }
 
-body{
-    font-family:Arial;
-    margin:40px;
-}
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
 
-input,
-textarea{
-    width:100%;
-    padding:10px;
-    margin-bottom:20px;
-}
+        img {
+            width: 150px;
+        }
 
-img{
-    width:150px;
-}
+        button {
+            padding: 10px 20px;
+        }
 
-.success{
-    color:green;
-}
-
-</style>
+        .success {
+            color: green;
+        }
+    </style>
 
 </head>
 
 <body>
 
-<h1>Manage Profile</h1>
+    <h1>Manage Profile</h1>
 
-<a href="authorDashboard.php">
+    <a href="authorDashboard.php">
+        <button>Back To Dashboard</button>
+    </a>
 
-<button>
+    <br><br>
 
-Back To Dashboard
+    <?php if (isset($_GET["success"])) { ?>
+        <p class="success">Profile Updated Successfully</p>
+    <?php } ?>
 
-</button> 
+    <form action="../../controllers/authorProfileController.php" method="POST" enctype="multipart/form-data">
 
-</a> <br><br>
+        <label>Display Name</label>
 
-<?php
+        <input
+            type="text"
+            name="name"
+            value="<?php echo $row["name"]; ?>">
 
-if(isset($_GET["success"])){
+        <label>Bio</label>
 
-    echo "<p class='success'>
-    Profile Updated Successfully
-    </p>";
+        <textarea name="bio"><?php echo $row["bio"]; ?></textarea>
 
-}
+        <label>Twitter</label>
 
-?>
+        <input
+            type="text"
+            name="twitter"
+            value="<?php echo $social["twitter"] ?? ""; ?>">
 
-<form
-action="../../controllers/authorProfileController.php"
-method="POST"
-enctype="multipart/form-data"
->
+        <label>LinkedIn</label>
 
-<label>Display Name</label>
+        <input
+            type="text"
+            name="linkedin"
+            value="<?php echo $social["linkedin"] ?? ""; ?>">
 
-<input
-type="text"
-name="name"
-value="<?php echo $row["name"]; ?>"
->
+        <label>GitHub</label>
 
-<label>Bio</label>
+        <input
+            type="text"
+            name="github"
+            value="<?php echo $social["github"] ?? ""; ?>">
 
-<textarea
-name="bio"
-><?php echo $row["bio"]; ?></textarea>
+        <?php if (!empty($row["profile_pic"])) { ?>
+            <img src="/project/blogPost/<?php echo $row["profile_pic"]; ?>" alt="Profile Image">
+            <br><br>
+        <?php } ?>
 
-<label>Twitter</label>
+        <label>Profile Picture</label>
 
-<input
-type="text"
-name="twitter"
-value="<?php echo $social["twitter"] ?? ""; ?>"
->
+        <input
+            type="file"
+            name="profilePic">
 
-<label>LinkedIn</label>
+        <button type="submit">
 
-<input
-type="text"
-name="linkedin"
-value="<?php echo $social["linkedin"] ?? ""; ?>"
->
+            Update Profile
 
-<label>GitHub</label>
+        </button>
 
-<input
-type="text"
-name="github"
-value="<?php echo $social["github"] ?? ""; ?>"
->
-
-<?php
-
-if(!empty($row["profile_pic"])){
-
-?>
-
-<img
-src="/project/blogPost/<?php echo $row["profile_pic"]; ?>"
-alt="Profile Image"
->
-
-<br><br>
-
-<?php
-
-}
-
-?>
-
-<label>Profile Picture</label>
-
-<input
-type="file"
-name="profilePic"
->
-
-<button type="submit">
-
-Update Profile
-
-</button>
-
-</form>
+    </form>
 
 </body>
 

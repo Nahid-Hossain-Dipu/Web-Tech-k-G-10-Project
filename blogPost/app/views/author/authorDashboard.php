@@ -7,38 +7,18 @@ include "../../models/authorUserModel.php";
 
 $authorId = $_SESSION["userId"];
 
-
-/* User Profile */
-
 $user = new AuthorUserModel($conn);
-
-$userResult = $user->getUser(
-    $authorId
-);
-
+$userResult = $user->getUser($authorId);
 $userRow = $userResult->fetch_assoc();
 
-$social = json_decode(
-    $userRow["social_links"],
-    true
-);
+$social = json_decode($userRow["social_links"], true);
 
-
-/* Article Status */
-
-$sql = "SELECT
-        title,
-        status
-        FROM articles
-        WHERE author_id=?";
+$sql = "SELECT title,status
+         FROM articles
+         WHERE author_id=?";
 
 $stmt = $conn->prepare($sql);
-
-$stmt->bind_param(
-    "i",
-    $authorId
-);
-
+$stmt->bind_param("i", $authorId);
 $stmt->execute();
 
 $result = $stmt->get_result();
@@ -51,285 +31,163 @@ $result = $stmt->get_result();
 
 <head>
 
-<title>Author Dashboard</title>
+    <title>Author Dashboard</title>
 
-<style>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f5f5f5;
+        }
 
-body{
+        .container {
+            width: 90%;
+            margin: auto;
+        }
 
-    font-family:Arial,sans-serif;
-    margin:40px;
-    background:#f5f5f5;
+        .profileCard {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-}
+        img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #ddd;
+        }
 
-#edit{
-    color: red;
-}
+        #edit {
+            color: red;
+        }
 
-.container{
+        h1 {
+            margin-bottom: 30px;
+        }
 
-    width:90%;
-    margin:auto;
+        h2 {
+            margin-top: 15px;
+        }
 
-}
+        p {
+            margin: 10px 0;
+        }
 
-.profileCard{
+        a {
+            text-decoration: none;
+        }
 
-    background:white;
-    border-radius:10px;
-    padding:25px;
-    margin-bottom:30px;
-    box-shadow:0 0 10px rgba(0,0,0,0.1);
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-top: 15px;
+            color: gray;
+        }
 
-}
+        button:hover {
+            color: black;
+        }
 
-img{
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
 
-    width:150px;
-    height:150px;
-    object-fit:cover;
-    border-radius:50%;
-    border:3px solid #ddd;
+        th {
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
 
-}
-
-h1{
-
-    margin-bottom:30px;
-
-}
-
-h2{
-
-    margin-top:15px;
-
-}
-
-p{
-
-    margin:10px 0;
-
-}
-
-a{
-
-    text-decoration:none;
-
-}
-
-button{
-
-    padding:10px 20px;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-    margin-right:10px;
-    margin-top:15px;
-    color: gray;
-
-}
-
-button:hover{
-    color: black;
-}
-
-table{
-
-    width:100%;
-    border-collapse:collapse;
-    background:white;
-
-
-}
-
-th{
-
-    padding:12px;
-    border:1px solid #ddd;
-
-}
-
-td{
-
-    padding:10px;
-    border:1px solid #ddd;
-
-}
-
-</style>
+        td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+    </style>
 
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-<h1>
+        <h1>Author Dashboard</h1>
 
-Author Dashboard
+        <div class="profileCard">
 
-</h1>
+            <?php if (!empty($userRow["profile_pic"])) { ?>
 
+                <img
+                    src="/project/blogPost/<?php echo $userRow["profile_pic"]; ?>"
+                    alt="Profile Image">
 
-<div class="profileCard">
+                <br><br>
 
-<?php
+            <?php } ?>
 
-if(!empty($userRow["profile_pic"])){
+            <h2><?php echo $userRow["name"]; ?></h2>
 
-?>
+            <p><b>Bio:</b> <?php echo $userRow["bio"] ?? "-"; ?></p>
 
-<img
-src="/project/blogPost/<?php echo $userRow["profile_pic"]; ?>"
-alt="Profile Image"
->
+            <p><b>Twitter:</b> <?php echo $social["twitter"] ?? "-"; ?></p>
 
-<br><br>
+            <p><b>LinkedIn:</b> <?php echo $social["linkedin"] ?? "-"; ?></p>
 
-<?php
+            <p><b>GitHub:</b> <?php echo $social["github"] ?? "-"; ?></p>
 
-}
+            <a id="edit" href="authorProfile.php">
 
-?>
+                Edit Profile
 
-<h2>
+            </a>
 
-<?php echo $userRow["name"]; ?>
+            <br><br>
 
-</h2>
+            <a href="createArticle.php">
+                <button>Create Article</button>
+            </a>
 
-<p>
+            <a href="articleList.php">
+                <button>My Articles</button>
+            </a>
 
-<b>Bio:</b>
+            <a href="../../controllers/authorLogout.php">
+                <button>Logout</button>
+            </a>
 
-<?php echo $userRow["bio"] ?? "-"; ?>
+        </div>
 
-</p>
+        <h2>Article Submission Status</h2>
 
-<p>
+        <table>
 
-<b>Twitter:</b>
+            <tr>
+                <th>Article</th>
+                <th>Submission Status</th>
+            </tr>
 
-<?php echo $social["twitter"] ?? "-"; ?>
+            <?php while ($row = $result->fetch_assoc()) { ?>
 
-</p>
+                <tr>
 
-<p>
+                    <td><?php echo $row["title"]; ?></td>
 
-<b>LinkedIn:</b>
+                    <td><?php echo $row["status"]; ?></td>
 
-<?php echo $social["linkedin"] ?? "-"; ?>
+                </tr>
 
-</p>
+            <?php } ?>
 
-<p>
+        </table>
 
-<b>GitHub:</b>
-
-<?php echo $social["github"] ?? "-"; ?>
-
-</p>
-
-<a id="edit" href="authorProfile.php">
-
-Edit Profile
-
-</a>
-
-<br><br>
-
-<a href="createArticle.php">
-
-<button>
-
-Create Article
-
-</button>
-
-</a>
-
-
-<a href="articleList.php">
-
-<button>
-
-My Articles
-
-</button>
-
-</a>
-
-
-<a href="../../controllers/authorLogout.php">
-
-<button>
-
-Logout
-
-</button>
-
-</a>
-
-</div>
-
-
-<h2>
-
-Article Submission Status
-
-</h2>
-
-
-<table>
-
-<tr>
-
-<th>
-
-Article
-
-</th>
-
-<th>
-
-Submission Status
-
-</th>
-
-</tr>
-
-<?php
-
-while($row = $result->fetch_assoc()){
-
-?>
-
-<tr>
-
-<td>
-
-<?php echo $row["title"]; ?>
-
-</td>
-
-<td>
-
-<?php echo $row["status"]; ?>
-
-</td>
-
-</tr>
-
-<?php
-
-}
-
-?>
-
-</table>
-
-</div>
+    </div>
 
 </body>
 

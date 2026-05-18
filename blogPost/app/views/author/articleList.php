@@ -8,30 +8,12 @@ $authorId = $_SESSION["userId"];
 
 $article = new ArticleModel($conn);
 
-
-/* Filter Articles */
-
-if(
-    isset($_GET["status"])
-    &&
-    $_GET["status"]!="all"
-){
-
+if (isset($_GET["status"]) && $_GET["status"] != "all") {
     $status = $_GET["status"];
-
-    $result = $article->filterArticles(
-        $authorId,
-        $status
-    );
-
-}else{
-
-    $result = $article->getAllArticles(
-        $authorId
-    );
-
+    $result = $article->filterArticles($authorId, $status);
+} else {
+    $result = $article->getAllArticles($authorId);
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -40,395 +22,294 @@ if(
 
 <head>
 
-<title>
+    <title>
 
-My Articles
+        My Articles
 
-</title>
+    </title>
 
-<style>
+    <style>
+        body {
 
-body{
+            font-family: Arial;
+            margin: 40px;
+            background-color: #f5f5f5;
 
-    font-family:Arial;
-    margin:40px;
-    background-color:#f5f5f5;
+        }
 
-}
+        h1 {
+            text-align: center;
+            color: black;
 
-h1{
-    text-align: center;
+        }
 
-    color:black;
+        .categories a {
+            color: grey;
+        }
 
-}
-.categories a {
-    color: grey;
-}
-.categories:hover{
-    color: white;
-}
+        .categories:hover {
+            color: white;
+        }
 
-table{
+        table {
 
-    width:100%;
-    border-collapse:collapse;
-    background:white;
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
 
-}
+        }
 
-th{
+        th {
 
-    background-color:black;
-    color:white;
-    padding:10px;
+            background-color: black;
+            color: white;
+            padding: 10px;
 
-}
+        }
 
-td{
+        td {
 
-    border:1px solid gray;
-    padding:10px;
+            border: 1px solid gray;
+            padding: 10px;
 
-}
+        }
 
-a{
+        a {
 
-    text-decoration:none;
-    color:black;
-    margin-right:10px;
+            text-decoration: none;
+            color: black;
+            margin-right: 10px;
 
-}
+        }
 
 
-button{
+        button {
 
-    padding:10px;
-    background-color:black;
-    color:white;
-    border:none;
-    cursor:pointer;
+            padding: 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            cursor: pointer;
 
-}
+        }
 
-input{
+        input {
 
-    padding:10px;
-    width:300px;
-    border:1px solid gray;
+            padding: 10px;
+            width: 300px;
+            border: 1px solid gray;
 
-}
+        }
 
-.filter{
+        .filter {
 
-    margin-bottom:20px;
+            margin-bottom: 20px;
 
-}
+        }
 
-.filter a{  
+        .filter a {
 
-    background-color:grey;
-    padding:8px;
-    border-radius:5px;
+            background-color: grey;
+            padding: 8px;
+            border-radius: 5px;
 
-}
-
-</style>
+        }
+    </style>
 
 </head>
 
 <body>
 
-<h1>
+    <h1>
 
-My Articles
+        My Articles
 
-</h1>
+    </h1>
 
 
-<a href="authorDashboard.php">
+    <a href="authorDashboard.php">
 
-<button>
+        <button>Back To Dashboard</button>
 
-Back To Dashboard
+    </a>
 
-</button>
+    <br><br>
 
-</a>
+    <input type="text" id="searchBox" placeholder="Search article..." onkeyup="searchArticle()">
 
-<br><br>
+    <br><br>
 
+    <div class="filter">
 
-<input
-type="text"
-id="searchBox"
-placeholder="Search article..."
-onkeyup="searchArticle()"
->
+        <a class="categories" href="articleList.php?status=all">All</a>
 
-<br><br>
+        <a class="categories" href="articleList.php?status=draft">Draft</a>
 
+        <a class="categories" href="articleList.php?status=submitted">Submitted</a>
 
-<div class="filter">
+        <a class="categories" href="articleList.php?status=revision_requested">Revision Requested</a>
 
-<a class="categories" href="articleList.php?status=all">
+        <a class="categories" href="articleList.php?status=published">Published</a>
 
-All
+        <a class="categories" href="articleList.php?status=unpublished">Unpublished</a>
 
-</a>
+    </div>
 
-<a class="categories" href="articleList.php?status=draft">
+    <table>
 
-Draft
+        <tr>
 
-</a>
+            <th>ID</th>
 
-<a class="categories" href="articleList.php?status=submitted">
+            <th>Title</th>
 
-Submitted
+            <th>Status</th>
 
-</a>
+            <th>Editor Feedback</th>
 
-<a class="categories" href="articleList.php?status=revision_requested">
+            <th>Created</th>
 
-Revision Requested
+            <th>Action</th>
 
-</a>
+        </tr>
 
-<a class="categories" href="articleList.php?status=published">
+        <tbody id="articleTable">
 
-Published
+            <?php
 
-</a>
+            while ($row = $result->fetch_assoc()) {
 
-<a class="categories" href="articleList.php?status=unpublished">
+            ?>
 
-Unpublished
+                <tr>
 
-</a>
+                    <td>
 
-</div>
+                        <?php echo $row["id"]; ?>
 
+                    </td>
 
-<table>
 
-<tr>
+                    <td>
 
-<th>ID</th>
+                        <a href="viewArticle.php?articleId=<?php echo $row["id"]; ?>"> <?php echo $row["title"]; ?>
 
-<th>Title</th>
+                        </a>
 
-<th>Status</th>
+                    </td>
 
-<th>Editor Feedback</th>
+                    <td>
 
-<th>Created</th>
+                        <?php echo $row["status"]; ?>
 
-<th>Action</th>
+                    </td>
 
-</tr>
+                    <td>
 
+                        <?php
 
-<tbody id="articleTable">
+                        if ($row["status"] == "revision_requested") {
 
-<?php
+                            echo $row["editor_feedback"];
+                        } else {
 
-while($row = $result->fetch_assoc()){
+                            echo "-";
+                        }
 
-?>
+                        ?>
 
-<tr>
+                    </td>
 
-<td>
+                    <td>
 
-<?php echo $row["id"]; ?>
+                        <?php echo $row["created_at"]; ?>
 
-</td>
+                    </td>
 
+                    <td>
 
-<td>
+                        <?php
 
-<a href="viewArticle.php?articleId=<?php echo $row["id"]; ?>">
+                        if ($row["status"] == "draft" || $row["status"] == "revision_requested") {
 
-<?php echo $row["title"]; ?>
+                        ?>
+                            <a href="editArticle.php?articleId=<?php echo $row["id"]; ?>">Edit</a>
 
-</a>
+                            <a href="../../controllers/articleController.php?submit=<?php echo $row["id"]; ?>">
 
-</td>
+                                <?php
 
+                                if ($row["status"] == "revision_requested") {
 
-<td>
+                                    echo "Resubmit";
+                                } else {
 
-<?php echo $row["status"]; ?>
+                                    echo "Submit";
+                                }
 
-</td>
+                                ?>
 
+                            </a>
 
-<td>
+                        <?php
 
-<?php
+                        }
 
-if($row["status"]=="revision_requested"){
+                        ?>
 
-    echo $row["editor_feedback"];
+                        <a href="revisionHistory.php?articleId=<?php echo $row["id"]; ?>">Revisions</a>
 
-}else{
 
-    echo "-";
+                        <a href="articleAnalytics.php?articleId=<?php echo $row["id"]; ?>">Analytics</a>
 
-}
 
-?>
+                        <a href="articleComments.php?articleId=<?php echo $row["id"]; ?>">Comments</a>
 
-</td>
+                        <?php
 
+                        if ($row["status"] == "published") {
 
-<td>
+                        ?>
 
-<?php echo $row["created_at"]; ?>
+                            <a href="../../controllers/articleController.php?unpublish=<?php echo $row["id"]; ?>">Unpublish</a>
 
-</td>
+                        <?php
 
+                        }
 
-<td>
+                        ?>
 
-<?php
+                    </td>
 
-if(
-    $row["status"]=="draft"
-    ||
-    $row["status"]=="revision_requested"
-){
+                </tr>
 
-?>
+            <?php
 
-<a href="editArticle.php?articleId=<?php echo $row["id"]; ?>">
+            }
 
-Edit
+            ?>
 
-</a>
+        </tbody>
 
+    </table>
 
-<a href="../../controllers/articleController.php?submit=<?php echo $row["id"]; ?>">
 
-<?php
+    <script>
+        function searchArticle() {
 
-if($row["status"]=="revision_requested"){
+            let keyword = document.getElementById("searchBox").value;
 
-    echo "Resubmit";
+            let xhr = new XMLHttpRequest();
 
-}else{
+            xhr.open("GET", "../../../ajax/searchArticles.php?keyword=" + keyword, true);
 
-    echo "Submit";
+            xhr.onload = function() {
 
-}
-
-?>
-
-</a>
-
-<?php
-
-}
-
-?>
-
-<a href="revisionHistory.php?articleId=<?php echo $row["id"]; ?>">
-
-Revisions
-
-</a>
-
-
-<a href="articleAnalytics.php?articleId=<?php echo $row["id"]; ?>">
-
-Analytics
-
-</a>
-
-
-<a href="articleComments.php?articleId=<?php echo $row["id"]; ?>">
-
-Comments
-
-</a>
-
-
-<?php
-
-if($row["status"]=="published"){
-
-?>
-
-<a href="../../controllers/articleController.php?unpublish=<?php echo $row["id"]; ?>">
-
-Unpublish
-
-</a>
-
-<?php
-
-}
-
-?>
-
-</td>
-
-</tr>
-
-<?php
-
-}
-
-?>
-
-</tbody>
-
-</table>
-
-
-<script>
-
-function searchArticle(){
-
-    let keyword =
-    document.getElementById(
-        "searchBox"
-    ).value;
-
-
-    let xhr =
-    new XMLHttpRequest();
-
-
-    xhr.open(
-
-        "GET",
-
-        "../../../ajax/searchArticles.php?keyword="
-        +
-        keyword,
-
-        true
-
-    );
-
-
-    xhr.onload=function(){
-
-        document.getElementById(
-            "articleTable"
-        ).innerHTML=
-        this.responseText;
-
-    };
-
-
-    xhr.send();
-
-}
-
-</script>
+                document.getElementById("articleTable").innerHTML = this.responseText;
+            };
+            xhr.send();
+        }
+    </script>
 
 </body>
 
