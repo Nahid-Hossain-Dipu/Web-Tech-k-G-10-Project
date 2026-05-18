@@ -282,6 +282,12 @@ if(
 
 </a>
 
+<a href="articleComments.php?articleId=<?php echo $row["id"]; ?>">
+
+Comments
+
+</a>
+
 
 <?php
 

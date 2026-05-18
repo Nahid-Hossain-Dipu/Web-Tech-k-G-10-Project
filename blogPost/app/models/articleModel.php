@@ -1,14 +1,15 @@
 <?php
 
-class ArticleModel{
+class ArticleModel
+{
 
     private $conn;
 
 
-    public function __construct($db){
+    public function __construct($db)
+    {
 
         $this->conn = $db;
-
     }
 
 
@@ -19,7 +20,7 @@ class ArticleModel{
 
         $authorId
 
-    ){
+    ) {
 
         $sql = "SELECT *
 
@@ -31,7 +32,7 @@ class ArticleModel{
 
 
         $stmt =
-        $this->conn->prepare($sql);
+            $this->conn->prepare($sql);
 
 
         $stmt->bind_param(
@@ -46,7 +47,6 @@ class ArticleModel{
         $stmt->execute();
 
         return $stmt->get_result();
-
     }
 
 
@@ -58,7 +58,7 @@ class ArticleModel{
         $authorId,
         $status
 
-    ){
+    ) {
 
         $sql = "SELECT *
 
@@ -71,7 +71,7 @@ class ArticleModel{
 
 
         $stmt =
-        $this->conn->prepare($sql);
+            $this->conn->prepare($sql);
 
 
         $stmt->bind_param(
@@ -87,7 +87,6 @@ class ArticleModel{
         $stmt->execute();
 
         return $stmt->get_result();
-
     }
 
 
@@ -107,7 +106,7 @@ class ArticleModel{
         $featuredImagePath,
         $status
 
-    ){
+    ) {
 
         $editorId = NULL;
 
@@ -132,7 +131,7 @@ class ArticleModel{
 
 
         $stmt =
-        $this->conn->prepare($sql);
+            $this->conn->prepare($sql);
 
 
         $stmt->bind_param(
@@ -155,7 +154,6 @@ class ArticleModel{
 
 
         return $stmt->execute();
-
     }
 
 
@@ -166,7 +164,7 @@ class ArticleModel{
 
         $articleId
 
-    ){
+    ) {
 
         $sql = "SELECT *
 
@@ -176,7 +174,7 @@ class ArticleModel{
 
 
         $stmt =
-        $this->conn->prepare($sql);
+            $this->conn->prepare($sql);
 
 
         $stmt->bind_param(
@@ -191,7 +189,6 @@ class ArticleModel{
         $stmt->execute();
 
         return $stmt->get_result();
-
     }
 
 
@@ -203,7 +200,7 @@ class ArticleModel{
         $articleId,
         $body
 
-    ){
+    ) {
 
         $sql = "UPDATE articles
 
@@ -213,7 +210,7 @@ class ArticleModel{
 
 
         $stmt =
-        $this->conn->prepare($sql);
+            $this->conn->prepare($sql);
 
 
         $stmt->bind_param(
@@ -227,7 +224,6 @@ class ArticleModel{
 
 
         return $stmt->execute();
-
     }
 
 
@@ -244,7 +240,7 @@ class ArticleModel{
         $featuredImagePath,
         $status
 
-    ){
+    ) {
 
         $sql = "UPDATE articles
 
@@ -259,7 +255,7 @@ class ArticleModel{
 
 
         $stmt =
-        $this->conn->prepare($sql);
+            $this->conn->prepare($sql);
 
 
         $stmt->bind_param(
@@ -278,7 +274,6 @@ class ArticleModel{
 
 
         return $stmt->execute();
-
     }
 
 
@@ -289,7 +284,7 @@ class ArticleModel{
 
         $articleId
 
-    ){
+    ) {
 
         $sql = "UPDATE articles
 
@@ -300,7 +295,7 @@ class ArticleModel{
 
 
         $stmt =
-        $this->conn->prepare($sql);
+            $this->conn->prepare($sql);
 
 
         $stmt->bind_param(
@@ -313,7 +308,6 @@ class ArticleModel{
 
 
         return $stmt->execute();
-
     }
 
 
@@ -324,7 +318,7 @@ class ArticleModel{
 
         $articleId
 
-    ){
+    ) {
 
         $sql = "UPDATE articles
 
@@ -334,7 +328,7 @@ class ArticleModel{
 
 
         $stmt =
-        $this->conn->prepare($sql);
+            $this->conn->prepare($sql);
 
 
         $stmt->bind_param(
@@ -347,19 +341,18 @@ class ArticleModel{
 
 
         return $stmt->execute();
-
     }
 
     public function searchArticles(
 
-    $authorId,
-    $keyword
+        $authorId,
+        $keyword
 
-){
+    ) {
 
-    $keyword = "%" . $keyword . "%";
+        $keyword = "%" . $keyword . "%";
 
-    $sql = "SELECT *
+        $sql = "SELECT *
 
             FROM articles
 
@@ -369,33 +362,32 @@ class ArticleModel{
             ORDER BY created_at ASC";
 
 
-    $stmt =
-    $this->conn->prepare($sql);
+        $stmt =
+            $this->conn->prepare($sql);
 
 
-    $stmt->bind_param(
+        $stmt->bind_param(
 
-        "is",
+            "is",
 
-        $authorId,
-        $keyword
+            $authorId,
+            $keyword
 
-    );
+        );
 
 
-    $stmt->execute();
+        $stmt->execute();
 
-    return $stmt->get_result();
+        return $stmt->get_result();
+    }
 
-}
+    public function getAnalytics(
 
-public function getAnalytics(
+        $articleId
 
-    $articleId
+    ) {
 
-){
-
-    $sql = "
+        $sql = "
 
     SELECT
 
@@ -430,27 +422,89 @@ public function getAnalytics(
     ";
 
 
-    $stmt =
-    $this->conn->prepare($sql);
+        $stmt =
+            $this->conn->prepare($sql);
 
 
-    $stmt->bind_param(
+        $stmt->bind_param(
 
-        "iii",
+            "iii",
 
-        $articleId,
-        $articleId,
-        $articleId
+            $articleId,
+            $articleId,
+            $articleId
 
-    );
+        );
 
 
-    $stmt->execute();
+        $stmt->execute();
 
-    return $stmt->get_result();
+        return $stmt->get_result();
+    }
 
+    public function getCommentsByArticle($articleId)
+    {
+
+        $sql = "SELECT *
+
+            FROM comments
+
+            WHERE article_id=?
+
+            ORDER BY created_at DESC";
+
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bind_param(
+            "i",
+            $articleId
+        );
+
+        $stmt->execute();
+
+        return $stmt->get_result();
+    }
+
+
+    public function replyComment(
+        $commentId,
+        $reply
+    ) {
+
+        $sql = "UPDATE comments
+
+            SET reply=?
+
+            WHERE id=?";
+
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bind_param(
+            "si",
+            $reply,
+            $commentId
+        );
+
+        return $stmt->execute();
+    }
+
+
+    public function deleteComment($commentId)
+    {
+
+        $sql = "DELETE
+
+            FROM comments
+
+            WHERE id=?";
+
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bind_param(
+            "i",
+            $commentId
+        );
+
+        return $stmt->execute();
+    }
 }
-
-}
-
-?>
